@@ -14,11 +14,6 @@
 #define ITERATIONS_XL 10
 
 template <int DIM, int ITERATIONS> void Test() {
-
-  // THIS IS A TEST
-  // HELLO
-  // TEST
-
   Matrix mat1(DIM, DIM);
   Matrix mat2(DIM, DIM);
   Matrix mat3(DIM, DIM);
