@@ -2,11 +2,11 @@
 
 #include "../core/Activation.h"
 #include <algorithm>
+#include <cfloat>
 
-using namespace core;
-
-template <typename Type, Type Lower = (Type)__FLT_EPSILON__>
-struct ReLU final : Activation<Type> {
-  Type operator()(Type x) const { return std::max(Lower, x); }
-  Type Derivative(Type x) const { return x > Lower ? (Type)1 : Lower; }
+struct LeakyReLU final : Activation {
+  float operator()(float x) const { return std::max(FLT_EPSILON, x); }
+  float Derivative(float x) const {
+    return x > FLT_EPSILON ? 1.0f : FLT_EPSILON;
+  }
 };

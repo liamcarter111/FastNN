@@ -1,4 +1,7 @@
 #pragma once
 #include "../math/NumericFunction.h"
 
-template <typename Type = double> using Activation = NumericFunction<Type>;
+struct Activation : public NumericFunction {
+  Activation() {}
+  virtual float Derivative(float x) const = 0;
+};

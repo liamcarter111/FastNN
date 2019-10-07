@@ -3,9 +3,9 @@
 #include "../core/Activation.h"
 #include <cmath>
 
-template <typename Type> struct Sigmoid final : Activation<Type> {
-  Type operator()(Type x) const { return (Type)1 / ((Type)1 + std::exp(-x)); }
-  Type Derivative(Type x) const {
-    return std::exp(-x) / std::pow((Type)1 + std::exp(-x), (Type)2);
+struct Sigmoid final : Activation {
+  float operator()(float x) const { return 1.0f / (1.0f + std::exp(-x)); }
+  float Derivative(float x) const {
+    return std::exp(-x) / std::pow(1.0f + std::exp(-x), 2);
   }
 };

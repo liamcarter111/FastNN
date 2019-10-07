@@ -2,7 +2,7 @@
 
 #include "../core/Activation.h"
 
-template <typename Type> struct Linear final : Activation<Type> {
-  Type operator()(Type x) const { return x; }
-  Type Derivative(Type x) const { return (Type)1; }
+struct Linear final : Activation {
+  float operator()(float x) const { return x; }
+  float Derivative(float x) const { return 1.0f; }
 };

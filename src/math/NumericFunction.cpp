@@ -1,5 +1,6 @@
 #include "NumericFunction.h"
+#include <cfloat>
 
-template <typename Type> Type NumericFunction<Type>::Derivative(Type x) const {
-  return ((*this)(__FLT_EPSILON__ + x) - (*this)(x)) / __FLT_EPSILON__;
+float NumericFunction::Derivative(float x) const {
+  return ((*this)(FLT_EPSILON + x) - (*this)(x)) / FLT_EPSILON;
 }
