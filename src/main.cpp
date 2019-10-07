@@ -17,6 +17,7 @@ template <int DIM, int ITERATIONS> void Test() {
 
   // THIS IS A TEST
   // HELLO
+  // TEST
 
   Matrix mat1(DIM, DIM);
   Matrix mat2(DIM, DIM);
