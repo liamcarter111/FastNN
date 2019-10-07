@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.0)
-project(cpp_NeuralNetwork VERSION 0.1.0)
+project(FastNN VERSION 0.1.0)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_HOME_DIRECTORY}/dist)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_HOME_DIRECTORY}/dist)
@@ -12,19 +12,19 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 add_library(
-    cpp_NeuralNetwork_math
+    FastNN_math
     src/math/NumericFunction.cpp
     src/math/Matrix.cpp
 )
 
 add_executable(
-    cpp_NeuralNetwork 
+    FastNN 
     src/main.cpp
 )
 
 target_link_libraries(
-    cpp_NeuralNetwork PRIVATE 
-    cpp_NeuralNetwork_math
+    FastNN PRIVATE 
+    FastNN_math
 )
 
 if(MSVC)
