@@ -1,5 +1,5 @@
-#include "../Core/Network.h"
-#include "../Math/Matrix.h"
+#include <Matrix.h>
+#include <Network.h>
 #include <chrono>
 #include <iomanip>
 #include <iostream>

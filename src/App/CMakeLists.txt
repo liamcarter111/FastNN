@@ -7,6 +7,7 @@ add_executable(
 
 target_link_libraries(
     FastNN PRIVATE 
+    Core
     Math
     Activations
 )

@@ -8,3 +8,5 @@ add_library(
     Sigmoid.cpp
     Tanh.cpp
 )
+
+target_include_directories(Activations INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}")
