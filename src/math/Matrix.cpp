@@ -138,7 +138,7 @@ Matrix &Matrix::ZERO(Matrix &out) {
   return out;
 }
 
-Matrix &Matrix::FILL(Matrix &out, float &v) {
+Matrix &Matrix::FILL(Matrix &out, const float &v) {
   for (int i = 0; i < out.Size(); i++) {
     out.Data()[i] = v;
   }
@@ -159,13 +159,6 @@ Matrix &Matrix::TRANSPOSE(Matrix &out) {
       out(i, j) = out(j, i);
       out(j, i) = temp;
     }
-  }
-  return out;
-}
-
-Matrix &Matrix::MAP(Matrix &out, const Matrix &lhs, const NumericFunction &fn) {
-  for (int i = 0; i < out.Size(); i++) {
-    out.Data()[i] = fn(lhs.Data()[i]);
   }
   return out;
 }

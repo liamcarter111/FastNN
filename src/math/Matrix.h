@@ -1,5 +1,6 @@
 #pragma once
 #include "NumericFunction.h"
+#include <functional>
 
 struct Matrix {
   Matrix(const Matrix *other);
@@ -26,6 +27,11 @@ struct Matrix {
 
   void Resize(const int &rows, const int &cols);
 
+  template <class TReturn>
+  TReturn Map(const std::function<TReturn(const float * /* begin */, const float * /* end */)> &fn) const {
+    return fn(Data(), Data() + Size());
+  }
+
   const int &RowSize() const { return m_iRows; }
 
   const int &ColSize() const { return m_iCols; }
@@ -47,13 +53,11 @@ struct Matrix {
 
   static Matrix &ZERO(Matrix &out);
 
-  static Matrix &FILL(Matrix &out, float &v);
+  static Matrix &FILL(Matrix &out, const float &v);
 
   static Matrix &RANDOM(Matrix &out);
 
   static Matrix &TRANSPOSE(Matrix &out);
-
-  static Matrix &MAP(Matrix &out, const Matrix &lhs, const NumericFunction &fn);
 
 private:
   int m_iCols;
