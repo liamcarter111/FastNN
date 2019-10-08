@@ -6,7 +6,7 @@ add_subdirectory(Activations)
 add_subdirectory(App)
 
 add_library(
-    FastNN OBJECT SHARED
+    FastNN SHARED
     Core
     Math
     Activations
