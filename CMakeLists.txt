@@ -4,28 +4,7 @@ project(FastNN VERSION 0.1.0)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_HOME_DIRECTORY}/dist)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_HOME_DIRECTORY}/dist)
 
-include(CTest)
-enable_testing()
-
-if(NOT CMAKE_BUILD_TYPE)
-  set(CMAKE_BUILD_TYPE Release)
-endif()
-
-add_library(
-    Math
-    src/Math/NumericFunction.cpp
-    src/Math/Matrix.cpp
-)
-
-add_executable(
-    FastNN 
-    src/main.cpp
-)
-
-target_link_libraries(
-    FastNN PRIVATE 
-    Math
-)
+add_subdirectory(src)
 
 if(MSVC)
   set(CMAKE_CXX_FLAGS_RELEASE "/Ox")
