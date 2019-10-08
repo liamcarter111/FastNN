@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../core/Activation.h"
+#include "../Core/Activation.h"
 
 struct Linear final : Activation {
   float operator()(float x) const { return x; }

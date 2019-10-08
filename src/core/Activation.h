@@ -1,5 +1,5 @@
 #pragma once
-#include "../math/NumericFunction.h"
+#include "../Math/NumericFunction.h"
 
 struct Activation : public NumericFunction {
   Activation() {}

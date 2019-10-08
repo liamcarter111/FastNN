@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../core/Activation.h"
+#include "../Core/Activation.h"
 #include <cmath>
 
 struct Tanh final : Activation {

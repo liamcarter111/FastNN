@@ -12,9 +12,9 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 add_library(
-    FastNN_math
-    src/math/NumericFunction.cpp
-    src/math/Matrix.cpp
+    Math
+    src/Math/NumericFunction.cpp
+    src/Math/Matrix.cpp
 )
 
 add_executable(
@@ -24,7 +24,7 @@ add_executable(
 
 target_link_libraries(
     FastNN PRIVATE 
-    FastNN_math
+    Math
 )
 
 if(MSVC)
