@@ -1,1 +1,1 @@
-cpp_NeuralNet
+C++ Fast Neural Network.
