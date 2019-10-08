@@ -162,3 +162,10 @@ Matrix &Matrix::TRANSPOSE(Matrix &out) {
   }
   return out;
 }
+
+Matrix &Matrix::MAP(Matrix &out, const Matrix &lhs, const NumericFunction &fn) {
+  for (int i = 0; i < out.Size(); i++) {
+    out.Data()[i] = fn(lhs.Data()[i]);
+  }
+  return out;
+}

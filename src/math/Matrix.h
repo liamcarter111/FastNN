@@ -1,4 +1,5 @@
 #pragma once
+#include "NumericFunction.h"
 
 struct Matrix {
   Matrix(const Matrix *other);
@@ -34,20 +35,6 @@ struct Matrix {
   const float *Data() const { return m_data; }
   float *Data() { return m_data; }
 
-  /*
-    friend std::ostream &operator<<(std::ostream &os, const Matrix &m) {
-
-      if (m.Size() > 0) {
-        os << m.Data()[0];
-      }
-
-      for (int i = 1; i < m.Size(); i++) {
-        os << " " << m.Data()[i];
-      }
-      return os;
-    }
-    */
-
   static Matrix &ADD(Matrix &out, const Matrix &lhs, const Matrix &rhs);
 
   static Matrix &SUB(Matrix &out, const Matrix &lhs, const Matrix &rhs);
@@ -65,6 +52,8 @@ struct Matrix {
   static Matrix &RANDOM(Matrix &out);
 
   static Matrix &TRANSPOSE(Matrix &out);
+
+  static Matrix &MAP(Matrix &out, const Matrix &lhs, const NumericFunction &fn);
 
 private:
   int m_iCols;
