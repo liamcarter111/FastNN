@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Core/Activation.h"
+#include <Activation.h>
 #include <cmath>
 
 struct Sigmoid final : Activation {

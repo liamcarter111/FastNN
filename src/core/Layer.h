@@ -1,5 +1,5 @@
 #pragma once
-#include "../Math/Matrix.h"
+#include <Matrix.h>
 
 class Layer final {
   Matrix m_weights;

@@ -1,7 +1,7 @@
 #pragma once
-#include "../Math/NumericFunction.h"
+#include <NumericFunction.h>
 
 struct Activation : public NumericFunction {
   Activation() {}
-  float Derivative(const float &x) const = 0;
+  virtual float Derivative(const float &x) const = 0;
 };

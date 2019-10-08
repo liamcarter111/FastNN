@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.0.0)
 
+SET(THIS Activations)
+
 SET(SRC_LIST 
     LeakyReLU.cpp
     Linear.cpp
@@ -17,9 +19,15 @@ SET(HEADER_FILES
 )
 
 add_library(
-    Activations
+    ${THIS}
     ${SRC_LIST}
     ${HEADER_FILES}
 )
 
-target_include_directories(Activations INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}")
+target_link_libraries(
+    ${THIS} PRIVATE 
+    Math
+    Core
+)
+
+target_include_directories(${THIS} INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})

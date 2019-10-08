@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.0.0)
 
+SET(THIS Core)
+
 SET(SRC_LIST 
     Layer.cpp
 )
@@ -11,9 +13,14 @@ SET(HEADER_FILES
 )
 
 add_library(
-    Core
+    ${THIS}
     ${SRC_LIST}
     ${HEADER_FILES}
 )
 
-target_include_directories(Core INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}")
+target_link_libraries(
+    ${THIS} PRIVATE 
+    Math
+)
+
+target_include_directories(${THIS} INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
