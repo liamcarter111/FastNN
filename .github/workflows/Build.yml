@@ -10,7 +10,7 @@ jobs:
     - uses: seanmiddleditch/gha-setup-ninja@master
     - name: Configure CMake with Ninja
       run: |
-        md build
+        mkdir build
         cd build
         cmake -G Ninja ..
     - name: Compile
@@ -22,7 +22,7 @@ jobs:
     - uses: seanmiddleditch/gha-setup-ninja@master
     - name: Configure CMake with Ninja
       run: |
-        md build
+        mkdir build
         cd build
         cmake -G Ninja ..
     - name: Compile
