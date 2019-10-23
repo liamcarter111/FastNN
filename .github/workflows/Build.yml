@@ -16,4 +16,4 @@ jobs:
         cd build
         cmake -G Ninja ..
     - name: Compile
-      run: make --build build
+      run: cmake --build build
