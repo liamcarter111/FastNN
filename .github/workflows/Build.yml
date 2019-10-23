@@ -11,10 +11,9 @@ jobs:
     - uses: actions/checkout@v1
     - uses: seanmiddleditch/gha-setup-ninja@master
     - name: Configure CMake with Ninja
-    - run: |
-      md build
-      cd build
-      cmake -G Ninja ..
-    - name: Compile 
-    - run: cmake --build build
-     
+      run: |
+        md build
+        cd build
+        cmake -G Ninja ..
+    - name: Compile
+      run: make --build build
