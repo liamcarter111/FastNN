@@ -27,3 +27,15 @@ jobs:
         cmake -G Ninja ..
     - name: Compile
       run: cmake --build build
+  build-mac:
+    runs-on: macOS-latest
+    steps:
+    - uses: actions/checkout@v1
+    - uses: seanmiddleditch/gha-setup-ninja@master
+    - name: Configure CMake with Ninja
+      run: |
+        mkdir build
+        cd build
+        cmake -G Ninja ..
+    - name: Compile
+      run: cmake --build build
