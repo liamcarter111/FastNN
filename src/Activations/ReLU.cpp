@@ -1,6 +1,11 @@
 #include "ReLU.h"
 #include <algorithm>
+#include <numeric>
 
-float ReLU::operator()(const float &x) const { return std::max((float)0, x); };
+void ReLU::operator()(float *begin, float *const end) const {
+  std::fill(begin, end, std::accumulate(begin, end, 0.0f));
+};
 
-float ReLU::Derivative(const float &x) const { return x > 0.f ? 1.0f : 0.f; }
+void ReLU::Derivative(float *begin, float *const end) const {
+  std::fill(begin, end, std::accumulate(begin, end, 0.0f) > 0.f ? 1.0f : 0.f);
+}

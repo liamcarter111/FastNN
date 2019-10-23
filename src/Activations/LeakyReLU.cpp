@@ -1,11 +1,16 @@
 #include "LeakyReLU.h"
 #include <algorithm>
-#include <cfloat>
+#include <numeric>
 
-float LeakyReLU::operator()(const float &x) const {
-  return std::max(FLT_EPSILON, x);
+#define _LeakyReLuMin 0.01f
+
+void LeakyReLU::operator()(float *begin, float *const end) const {
+  std::fill(begin, end,
+            std::max(_LeakyReLuMin, std::accumulate(begin, end, 0.0f)));
 };
 
-float LeakyReLU::Derivative(const float &x) const {
-  return x > FLT_EPSILON ? 1.0f : FLT_EPSILON;
+void LeakyReLU::Derivative(float *begin, float *const end) const {
+  std::fill(begin, end,
+            std::accumulate(begin, end, 0.0f) > _LeakyReLuMin ? 1.0f
+                                                              : _LeakyReLuMin);
 }

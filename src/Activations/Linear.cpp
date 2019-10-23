@@ -1,5 +1,11 @@
 #include "Linear.h"
+#include <algorithm>
+#include <numeric>
 
-float Linear::operator()(const float &x) const { return x; };
+void Linear::operator()(float *begin, float *const end) const {
+  std::fill(begin, end, std::accumulate(begin, end, 0.0f));
+};
 
-float Linear::Derivative(const float &x) const { return 1.0; }
+void Linear::Derivative(float *begin, float *const end) const {
+  std::fill(begin, end, 1.0f);
+}

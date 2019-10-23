@@ -8,6 +8,7 @@ SET(SRC_LIST
     ReLU.cpp
     Sigmoid.cpp
     Tanh.cpp
+    Softmax.cpp
 )
 
 SET(HEADER_FILES 
@@ -16,6 +17,7 @@ SET(HEADER_FILES
     ReLU.h
     Sigmoid.h
     Tanh.h
+    Softmax.h
 )
 
 add_library(

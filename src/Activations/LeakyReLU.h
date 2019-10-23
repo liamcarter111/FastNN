@@ -3,6 +3,6 @@
 #include <Activation.h>
 
 struct LeakyReLU final : Activation {
-  float operator()(const float &x) const;
-  float Derivative(const float &x) const;
+  void operator()(float *begin, float *const end) const;
+  void Derivative(float *begin, float *const end) const;
 };

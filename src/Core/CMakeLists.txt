@@ -3,13 +3,21 @@ cmake_minimum_required(VERSION 3.0.0)
 SET(THIS Core)
 
 SET(SRC_LIST 
-    Layer.cpp
+BackwardLayer.cpp
+ForwardLayer.cpp
 )
 
 SET(HEADER_FILES 
     Activation.h
+    BackwardLayer.h
+    Cost.h
+    ForwardLayer.h
+    HiddenLayer.h
+    InputLayer.h
     Layer.h
+    InputLayer.h
     Network.h
+    OutputLayer.h
 )
 
 add_library(

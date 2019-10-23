@@ -1,10 +1,7 @@
 #pragma once
+#include "Activation.h"
 #include <Matrix.h>
 
-class Layer final {
-  Matrix m_weights;
+class Layer {
   Matrix m_scores;
-
-public:
-  static Layer &ForwardProp(Layer &out, const Layer &a, const Layer b);
 };
