@@ -9,11 +9,12 @@ jobs:
     
     steps:
     - uses: actions/checkout@v1
-    - name: CMake
-      shell: powershell
-      run: |
-        md build
-        cd build
-        cmake -GNinja ../
-        ninja
-        
+    - uses: seanmiddleditch/gha-setup-ninja@master
+    - name: Configure CMake with Ninja
+    - run: |
+      md build
+      cd build
+      cmake -G Ninja ..
+    - name: Compile 
+    - run: cmake --build build
+     
