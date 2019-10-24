@@ -32,3 +32,4 @@ target_link_libraries(
 )
 
 target_include_directories(${THIS} INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
+set_property(TARGET ${THIS} PROPERTY CXX_STANDARD 17)

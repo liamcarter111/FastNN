@@ -21,3 +21,4 @@ target_link_libraries(
     Math
     Activations
 )
+set_property(TARGET ${THIS} PROPERTY CXX_STANDARD 17)
