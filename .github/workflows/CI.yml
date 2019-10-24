@@ -9,7 +9,7 @@ jobs:
   build-windows:
     runs-on: windows-latest
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@master
     - uses: seanmiddleditch/gha-setup-ninja@master
     - name: Configure CMake with Ninja
       run: |
