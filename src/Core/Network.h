@@ -1,8 +1,13 @@
 #pragma once
-#include "Layer.h"
+#include "HiddenLayer.h"
+#include "InputLayer.h"
+#include "OutputLayer.h"
 #include <vector>
 
-
 class Network final {
-  std::vector<Layer> m_layers;
+  InputLayer m_inputLayer;
+  OutputLayer m_outputLayer;
+  std::vector<HiddenLayer> m_hiddenLayers;
+
+  std::vector<float> ForwardProp(const std::vector<float> &input);
 };

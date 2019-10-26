@@ -1,8 +1,11 @@
 #pragma once
 #include "Activation.h"
+#include "BackwardLayer.h"
 #include "Layer.h"
 
 class ForwardLayer : public Layer {
 public:
-  static Layer &ForwardProp(Layer &out, const ForwardLayer &a, const Layer &b);
+  ForwardLayer(const int size);
+
+  static void ForwardProp(const ForwardLayer &a, BackwardLayer &b);
 };

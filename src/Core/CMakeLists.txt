@@ -3,8 +3,12 @@ cmake_minimum_required(VERSION 3.0.0)
 SET(THIS Core)
 
 SET(SRC_LIST 
-BackwardLayer.cpp
-ForwardLayer.cpp
+    Layer.cpp
+    InputLayer.cpp
+    OutputLayer.cpp
+    BackwardLayer.cpp
+    ForwardLayer.cpp
+    Network.cpp
 )
 
 SET(HEADER_FILES 

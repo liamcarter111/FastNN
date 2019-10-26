@@ -26,12 +26,6 @@ struct Matrix {
 
   void Resize(const int &rows, const int &cols);
 
-  template <class TReturn>
-  TReturn Map(const std::function<TReturn(const float * /* begin */,
-                                          const float * /* end */)> &fn) const {
-    return fn(Data(), Data() + Size());
-  }
-
   const int &RowSize() const { return m_iRows; }
 
   const int &ColSize() const { return m_iCols; }
