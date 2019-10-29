@@ -3,17 +3,32 @@
 
 BackwardLayer::BackwardLayer(const int size, const int previousLayerSize,
                              Activation *activation)
-    : Layer(size), m_weights(previousLayerSize, size),
+    : Layer(size), m_biases(1, size), m_weights(previousLayerSize, size),
       m_activation(activation) {
-  Matrix::RANDOM(m_weights);
+  m_weights.Randomize();
+  m_biases.Randomize();
 }
 
-Layer &BackwardLayer::BackwardProp(Layer &out, const BackwardLayer &a,
-                                   const Layer &b) {
-  return out;
+void BackwardLayer::BackwardProp(const Layer &pL, BackwardLayer &cL,
+                                 const float &learningRate) {
+
+  // deltaBias = learningRate * error * x
+  // deltaWeights = learningRate * error
+
+  // Local Error ??
+  const Matrix errors(0, 0);
+
+  Matrix gradients = cL.GetValues();
+  (*cL.GetActivation())
+      .Derivative(gradients.Data(), gradients.Data() + gradients.Size());
+
+  const Matrix deltaBiases = errors * learningRate;
+  const Matrix deltaWeights =
+      errors * gradients * cL.GetValues().Transpose() * learningRate;
 }
 
 const Matrix &BackwardLayer::GetWeights() const { return m_weights; }
-Matrix &BackwardLayer::GetWeights() { return m_weights; }
 
 Activation *BackwardLayer::GetActivation() const { return m_activation; }
+
+const Matrix &BackwardLayer::GetBiases() const { return m_biases; }

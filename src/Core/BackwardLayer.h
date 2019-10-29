@@ -4,17 +4,19 @@
 
 class BackwardLayer : public Layer {
   Matrix m_weights;
+  Matrix m_biases;
   Activation *m_activation;
 
 public:
   BackwardLayer(const int size, const int previousLayerSize,
                 Activation *activation);
 
-  static Layer &BackwardProp(Layer &out, const BackwardLayer &a,
-                             const Layer &b);
+  static void BackwardProp(const Layer &pL, BackwardLayer &cL,
+                           const float &learningRate);
 
   const Matrix &GetWeights() const;
-  Matrix &GetWeights();
 
   Activation *GetActivation() const;
+
+  const Matrix &GetBiases() const;
 };

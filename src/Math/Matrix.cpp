@@ -41,6 +41,10 @@ Matrix &Matrix::operator-=(const float &rhs) {
   return Matrix::SUB(*this, *this, rhs);
 }
 
+Matrix &Matrix::operator-=(const Matrix &rhs) {
+  return Matrix::SUB(*this, *this, rhs);
+}
+
 Matrix Matrix::operator-(const Matrix &rhs) const {
   Matrix result(RowSize(), ColSize());
   Matrix::SUB(result, *this, rhs);
@@ -56,6 +60,10 @@ Matrix &Matrix::operator+=(const float &rhs) {
   return Matrix::ADD(*this, *this, rhs);
 }
 
+Matrix &Matrix::operator+=(const Matrix &rhs) {
+  return Matrix::ADD(*this, *this, rhs);
+}
+
 Matrix Matrix::operator+(const Matrix &rhs) const {
   Matrix result(RowSize(), ColSize());
   Matrix::ADD(result, *this, rhs);
@@ -68,6 +76,10 @@ Matrix Matrix::operator*(const float &rhs) const {
 }
 
 Matrix &Matrix::operator*=(const float &rhs) {
+  return Matrix::MUL(*this, *this, rhs);
+}
+
+Matrix &Matrix::operator*=(const Matrix &rhs) {
   return Matrix::MUL(*this, *this, rhs);
 }
 
@@ -91,6 +103,30 @@ float &Matrix::operator()(const int &row, const int &col) {
 
 const float &Matrix::operator()(const int &row, const int &col) const {
   return Data()[col + row * ColSize()];
+}
+
+Matrix Matrix::Hadamard(const Matrix &rhs) const {
+  Matrix result(this);
+  return Matrix::HADAMARD(result, *this, rhs);
+}
+
+Matrix Matrix::Transpose() const {
+  Matrix result(this);
+  return Matrix::TRANSPOSE(result, *this);
+}
+
+void Matrix::Zero() { Fill(0.0f); }
+
+void Matrix::Fill(const float &v) {
+  for (int i = 0; i < Size(); i++) {
+    Data()[i] = v;
+  }
+}
+
+void Matrix::Randomize() {
+  for (int i = 0; i < Size(); i++) {
+    Data()[i] = (float)rand() / RAND_MAX;
+  }
 }
 
 void Matrix::Resize(const int &rows, const int &cols) {
@@ -181,32 +217,16 @@ Matrix &Matrix::MUL(Matrix &out, const Matrix &lhs, const Matrix &rhs) {
   return out;
 }
 
-Matrix &Matrix::ZERO(Matrix &out) {
-  for (int i = 0; i < out.Size(); i++) {
-    out.Data()[i] = 0.0f;
-  }
-  return out;
-}
+Matrix &Matrix::TRANSPOSE(Matrix &out, const Matrix &rhs) {
+  assert(rhs.ColSize() == out.ColSize());
+  assert(rhs.RowSize() == out.RowSize());
 
-Matrix &Matrix::FILL(Matrix &out, const float &v) {
-  for (int i = 0; i < out.Size(); i++) {
-    out.Data()[i] = v;
-  }
-  return out;
-}
-
-Matrix &Matrix::RANDOM(Matrix &out) {
-  for (int i = 0; i < out.Size(); i++) {
-    out.Data()[i] = (float)rand() / RAND_MAX;
-  }
-  return out;
-}
-
-Matrix &Matrix::TRANSPOSE(Matrix &out) {
   for (int i = 0; i < out.RowSize(); i++) {
     for (int j = i; j < out.ColSize(); j++) {
-      float temp = out(i, j);
-      out(i, j) = out(j, i);
+      // Incase we transpose ourself we need to make sure we "swap" the
+      // elements.
+      float temp = rhs(i, j);
+      out(i, j) = rhs(j, i);
       out(j, i) = temp;
     }
   }

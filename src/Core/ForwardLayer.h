@@ -7,5 +7,5 @@ class ForwardLayer : public Layer {
 public:
   ForwardLayer(const int size);
 
-  static void ForwardProp(const ForwardLayer &a, BackwardLayer &b);
+  static void ForwardProp(const ForwardLayer &pL, BackwardLayer &cL);
 };

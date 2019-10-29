@@ -1,5 +1,4 @@
 #pragma once
-#include <functional>
 
 struct Matrix {
   Matrix(const Matrix *other);
@@ -16,17 +15,23 @@ struct Matrix {
 
   Matrix &operator-=(const float &rhs);
 
+  Matrix &operator-=(const Matrix &rhs);
+
   Matrix operator-(const Matrix &rhs) const;
 
   Matrix operator+(const float &rhs) const;
 
   Matrix &operator+=(const float &rhs);
 
+  Matrix &operator+=(const Matrix &rhs);
+
   Matrix operator+(const Matrix &rhs) const;
 
   Matrix operator*(const float &rhs) const;
 
   Matrix &operator*=(const float &rhs);
+
+  Matrix &operator*=(const Matrix &rhs);
 
   Matrix operator*(const Matrix &rhs) const;
 
@@ -35,6 +40,16 @@ struct Matrix {
   float &operator()(const int &row, const int &col);
 
   const float &operator()(const int &row, const int &col) const;
+
+  Matrix Hadamard(const Matrix &rhs) const;
+
+  Matrix Transpose() const;
+
+  void Zero();
+
+  void Fill(const float &v);
+
+  void Randomize();
 
   void Resize(const int &rows, const int &cols);
 
@@ -61,13 +76,7 @@ struct Matrix {
 
   static Matrix &MUL(Matrix &out, const Matrix &lhs, const Matrix &rhs);
 
-  static Matrix &ZERO(Matrix &out);
-
-  static Matrix &FILL(Matrix &out, const float &v);
-
-  static Matrix &RANDOM(Matrix &out);
-
-  static Matrix &TRANSPOSE(Matrix &out);
+  static Matrix &TRANSPOSE(Matrix &out, const Matrix &rhs);
 
 private:
   int m_iCols;
