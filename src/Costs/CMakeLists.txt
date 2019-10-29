@@ -1,23 +1,15 @@
 cmake_minimum_required(VERSION 3.0.0)
 
-SET(THIS Activations)
+SET(THIS Costs)
 
 SET(SRC_LIST 
-    LeakyReLU.cpp
-    Linear.cpp
-    ReLU.cpp
-    Sigmoid.cpp
-    Tanh.cpp
-    Softmax.cpp
+    MeanSquareError.cpp
+    RootMeanSquareError.cpp
 )
 
 SET(HEADER_FILES 
-    LeakyReLU.h
-    Linear.h
-    ReLU.h
-    Sigmoid.h
-    Tanh.h
-    Softmax.h
+    MeanSquareError.h
+    RootMeanSquareError.h
 )
 
 add_library(
