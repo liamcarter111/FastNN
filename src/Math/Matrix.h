@@ -12,6 +12,18 @@ struct Matrix {
 
   ~Matrix();
 
+  Matrix operator-(const float &rhs) const;
+
+  Matrix &operator-=(const float &rhs);
+
+  Matrix operator-(const Matrix &rhs) const;
+
+  Matrix operator+(const float &rhs) const;
+
+  Matrix &operator+=(const float &rhs);
+
+  Matrix operator+(const Matrix &rhs) const;
+
   Matrix operator*(const float &rhs) const;
 
   Matrix &operator*=(const float &rhs);
@@ -37,7 +49,11 @@ struct Matrix {
 
   static Matrix &ADD(Matrix &out, const Matrix &lhs, const Matrix &rhs);
 
+  static Matrix &ADD(Matrix &out, const Matrix &lhs, const float &rhs);
+
   static Matrix &SUB(Matrix &out, const Matrix &lhs, const Matrix &rhs);
+
+  static Matrix &SUB(Matrix &out, const Matrix &lhs, const float &rhs);
 
   static Matrix &HADAMARD(Matrix &out, const Matrix &lhs, const Matrix &rhs);
 

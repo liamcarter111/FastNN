@@ -32,6 +32,36 @@ Matrix::~Matrix() {
   m_data = nullptr;
 }
 
+Matrix Matrix::operator-(const float &rhs) const {
+  Matrix result(this);
+  return Matrix::SUB(result, *this, rhs);
+}
+
+Matrix &Matrix::operator-=(const float &rhs) {
+  return Matrix::SUB(*this, *this, rhs);
+}
+
+Matrix Matrix::operator-(const Matrix &rhs) const {
+  Matrix result(RowSize(), ColSize());
+  Matrix::SUB(result, *this, rhs);
+  return result;
+}
+
+Matrix Matrix::operator+(const float &rhs) const {
+  Matrix result(this);
+  return Matrix::ADD(result, *this, rhs);
+}
+
+Matrix &Matrix::operator+=(const float &rhs) {
+  return Matrix::ADD(*this, *this, rhs);
+}
+
+Matrix Matrix::operator+(const Matrix &rhs) const {
+  Matrix result(RowSize(), ColSize());
+  Matrix::ADD(result, *this, rhs);
+  return result;
+}
+
 Matrix Matrix::operator*(const float &rhs) const {
   Matrix result(this);
   return Matrix::MUL(result, *this, rhs);
@@ -87,6 +117,16 @@ Matrix &Matrix::ADD(Matrix &out, const Matrix &lhs, const Matrix &rhs) {
   return out;
 }
 
+Matrix &Matrix::ADD(Matrix &out, const Matrix &lhs, const float &rhs) {
+  assert(lhs.ColSize() == out.ColSize());
+  assert(lhs.RowSize() == out.RowSize());
+
+  for (int i = 0; i < out.Size(); i++) {
+    out.Data()[i] = lhs.Data()[i] + rhs;
+  }
+  return out;
+}
+
 Matrix &Matrix::SUB(Matrix &out, const Matrix &lhs, const Matrix &rhs) {
   assert(rhs.ColSize() == out.ColSize());
   assert(rhs.RowSize() == out.RowSize());
@@ -95,6 +135,16 @@ Matrix &Matrix::SUB(Matrix &out, const Matrix &lhs, const Matrix &rhs) {
 
   for (int i = 0; i < out.Size(); i++) {
     out.Data()[i] = lhs.Data()[i] - rhs.Data()[i];
+  }
+  return out;
+}
+
+Matrix &Matrix::SUB(Matrix &out, const Matrix &lhs, const float &rhs) {
+  assert(lhs.ColSize() == out.ColSize());
+  assert(lhs.RowSize() == out.RowSize());
+
+  for (int i = 0; i < out.Size(); i++) {
+    out.Data()[i] = lhs.Data()[i] - rhs;
   }
   return out;
 }
