@@ -2,7 +2,7 @@
 #include "Activation.h"
 #include "Layer.h"
 
-class BackwardLayer : public Layer {
+class BackwardLayer : virtual public Layer {
   Matrix m_weights;
   Matrix m_biases;
   Activation *m_activation;
@@ -12,7 +12,7 @@ public:
                 Activation *activation);
 
   static void BackwardProp(const Layer &pL, BackwardLayer &cL,
-                           const float &learningRate);
+                           const float &learningRate, Matrix &errors);
 
   const Matrix &GetWeights() const;
 

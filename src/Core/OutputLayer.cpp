@@ -3,4 +3,4 @@
 
 OutputLayer::OutputLayer(const int size, const int previousLayerSize,
                          Activation *activation)
-    : BackwardLayer(size, previousLayerSize, activation) {}
+    : Layer(size), BackwardLayer(size, previousLayerSize, activation) {}

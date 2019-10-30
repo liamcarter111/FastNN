@@ -10,13 +10,10 @@ BackwardLayer::BackwardLayer(const int size, const int previousLayerSize,
 }
 
 void BackwardLayer::BackwardProp(const Layer &pL, BackwardLayer &cL,
-                                 const float &learningRate) {
+                                 const float &learningRate, Matrix &errors) {
 
   // deltaBias = learningRate * error * x
   // deltaWeights = learningRate * error
-
-  // Local Error ??
-  const Matrix errors(0, 0);
 
   Matrix gradients = cL.GetValues();
   (*cL.GetActivation())

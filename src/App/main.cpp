@@ -1,6 +1,10 @@
-#include <ForwardLayer.h>
+#include <Cost.h>
+#include <HiddenLayer.h>
 #include <InputLayer.h>
 #include <Matrix.h>
+#include <MeanSquareError.h>
+#include <OutputLayer.h>
+#include <Sigmoid.h>
 #include <chrono>
 #include <iomanip>
 #include <iostream>
@@ -8,9 +12,11 @@
 
 int main() {
   try {
-    std::vector<float> test;
 
-    InputLayer layer(test);
+    MeanSquareError mse();
+    //  Cost cost = (Cost)mse;
+    InputLayer in(2);
+    // OutputLayer ot(1, 2, sig);
 
     return 0;
   } catch (const std::exception &e) {

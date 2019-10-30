@@ -20,5 +20,6 @@ target_link_libraries(
     Core
     Math
     Activations
+    Costs
 )
 set_property(TARGET ${THIS} PROPERTY CXX_STANDARD 17)

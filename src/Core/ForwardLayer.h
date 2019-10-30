@@ -3,7 +3,7 @@
 #include "BackwardLayer.h"
 #include "Layer.h"
 
-class ForwardLayer : public Layer {
+class ForwardLayer : virtual public Layer {
 public:
   ForwardLayer(const int size);
 

@@ -3,5 +3,5 @@
 
 class InputLayer : public ForwardLayer {
 public:
-  InputLayer(const std::vector<float> &values);
+  InputLayer(const int size);
 };

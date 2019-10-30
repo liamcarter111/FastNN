@@ -2,4 +2,4 @@
 #include "BackwardLayer.h"
 #include "ForwardLayer.h"
 
-class HiddenLayer : public ForwardLayer, BackwardLayer {};
+class HiddenLayer : public ForwardLayer, public BackwardLayer {};
