@@ -1,16 +1,17 @@
 #include "LeakyReLU.h"
-#include <algorithm>
-#include <numeric>
 
 #define _LeakyReLuMin 0.01f
 
 void LeakyReLU::operator()(float *begin, float *const end) const {
-  std::fill(begin, end,
-            std::max(_LeakyReLuMin, std::accumulate(begin, end, 0.0f)));
+  while (begin != end) {
+    *begin = *begin > _LeakyReLuMin ? *begin : 0.0f;
+    ++begin;
+  }
 };
 
 void LeakyReLU::Derivative(float *begin, float *const end) const {
-  std::fill(begin, end,
-            std::accumulate(begin, end, 0.0f) > _LeakyReLuMin ? 1.0f
-                                                              : _LeakyReLuMin);
+  while (begin != end) {
+    *begin = *begin != 0.0f ? 1.0f : 0.0f;
+    ++begin;
+  }
 }

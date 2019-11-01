@@ -1,13 +1,16 @@
 #include "Tanh.h"
-#include <algorithm>
 #include <cmath>
-#include <numeric>
 
 void Tanh::operator()(float *begin, float *const end) const {
-  std::fill(begin, end, std::tanh(std::accumulate(begin, end, 0.0f)));
+  while (begin != end) {
+    *begin = std::tanh(*begin);
+    ++begin;
+  }
 }
 
 void Tanh::Derivative(float *begin, float *const end) const {
-  std::fill(begin, end,
-            1.0f - std::pow(std::tanh(std::accumulate(begin, end, 0.0f)), 2));
+  while (begin != end) {
+    *begin = 1.0f - ((*begin) * (*begin));
+    ++begin;
+  }
 }

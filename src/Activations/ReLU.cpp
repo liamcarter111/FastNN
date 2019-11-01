@@ -3,9 +3,15 @@
 #include <numeric>
 
 void ReLU::operator()(float *begin, float *const end) const {
-  std::fill(begin, end, std::accumulate(begin, end, 0.0f));
+  while (begin != end) {
+    *begin = *begin > 0.0f ? *begin : 0.0f;
+    ++begin;
+  }
 };
 
 void ReLU::Derivative(float *begin, float *const end) const {
-  std::fill(begin, end, std::accumulate(begin, end, 0.0f) > 0.f ? 1.0f : 0.f);
+  while (begin != end) {
+    *begin = *begin != 0.0f ? 1.0f : 0.0f;
+    ++begin;
+  }
 }
