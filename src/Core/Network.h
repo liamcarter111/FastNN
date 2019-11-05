@@ -15,7 +15,7 @@ public:
   Network(InputLayer &inputLayer, std::vector<HiddenLayer> &hiddenLayers,
           OutputLayer &outputLayer, Cost &cost);
 
-  const Matrix &ForwardProp(Matrix &input);
+  const Matrix &ForwardProp();
 
-  float Optimize(Matrix &input, Matrix &expected);
+  float Optimize(Matrix &expected);
 };

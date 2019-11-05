@@ -7,6 +7,7 @@
 #include <Network.h>
 #include <OutputLayer.h>
 #include <chrono>
+#include <cstdlib>
 #include <iomanip>
 #include <iostream>
 #include <vector>
@@ -27,7 +28,20 @@ int main() {
     int iterations = 1000;
 
     while (--iterations) {
-      // net.ForwardProp();
+      int i0 = rand() % 2;
+      int i1 = rand() % 2;
+      int exp = i0 ^ i1;
+
+      iL.GetValues()(0, 0) = i0;
+      iL.GetValues()(1, 0) = i1;
+
+      net.ForwardProp();
+
+      Matrix mExpected(1, 1);
+      mExpected(0, 0) = i0 ^ i1;
+
+      net.Optimize(mExpected);
+      std::cout << cost.GetError();
     }
 
     return 0;
