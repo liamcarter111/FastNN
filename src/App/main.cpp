@@ -41,9 +41,10 @@ int main() {
       mExpected(0, 0) = i0 ^ i1;
 
       net.Optimize(mExpected);
-      std::cout << "ERROR: " << cost.GetError() << ", INPUT: (" << i0 << ", "
-                << i1 << ") OUTPUT:" << oL.GetValues()(0, 0)
-                << ", EXPECTED: " << exp << "\n";
+      std::cout << "ERROR: " << (1.0f - cost.GetError()) * 100.0f
+                << ", INPUT: (" << i0 << ", " << i1
+                << ") OUTPUT:" << oL.GetValues()(0, 0) << ", EXPECTED: " << exp
+                << "\n";
     }
 
     std::cin;
