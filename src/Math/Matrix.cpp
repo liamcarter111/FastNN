@@ -3,6 +3,8 @@
 #include <cstdlib>
 #include <cstring>
 
+Matrix::Matrix() : m_iCols(0), m_iRows(0), m_iElements(0){};
+
 Matrix::Matrix(const Matrix *other)
     : m_iCols(other->ColSize()), m_iRows(other->RowSize()),
       m_iElements(other->Size()), m_data(new float[Size()]) {

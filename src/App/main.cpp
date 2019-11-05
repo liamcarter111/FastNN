@@ -1,10 +1,11 @@
 #include <Cost.h>
+#include <HalfSquaredError.h>
 #include <HiddenLayer.h>
 #include <InputLayer.h>
+#include <Linear.h>
 #include <Matrix.h>
-#include <MeanSquareError.h>
+#include <Network.h>
 #include <OutputLayer.h>
-#include <Sigmoid.h>
 #include <chrono>
 #include <iomanip>
 #include <iostream>
@@ -12,11 +13,22 @@
 
 int main() {
   try {
+    Cost cost = HalfSquaredError();
+    Activation hA = Linear();
+    Activation oA = Linear();
+    InputLayer iL(2);
+    HiddenLayer hL(2, 2, hA);
+    OutputLayer oL(1, 2, oA);
 
-    MeanSquareError mse();
-    //  Cost cost = (Cost)mse;
-    InputLayer in(2);
-    // OutputLayer ot(1, 2, sig);
+    std::vector<HiddenLayer> hiddenLayers({hL});
+
+    Network net(iL, hiddenLayers, oL, cost);
+
+    int iterations = 1000;
+
+    while (--iterations) {
+      // net.ForwardProp();
+    }
 
     return 0;
   } catch (const std::exception &e) {

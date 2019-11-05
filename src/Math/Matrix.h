@@ -1,6 +1,8 @@
 #pragma once
 
 struct Matrix {
+  Matrix();
+
   Matrix(const Matrix *other);
 
   Matrix(const Matrix &other);

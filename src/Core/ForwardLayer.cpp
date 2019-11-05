@@ -11,6 +11,5 @@ void ForwardLayer::ForwardProp(const ForwardLayer &pL, BackwardLayer &cL) {
   cL.GetValues() += cL.GetBiases();
 
   // Apply the activation to the new computed values of the current layer.
-  (*cL.GetActivation())(cL.GetValues().Data(),
-                        cL.GetValues().Data() + cL.GetSize());
+  cL.GetActivation().Set(cL.GetValues());
 }
