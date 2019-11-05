@@ -137,8 +137,11 @@ void Matrix::Resize(const int &rows, const int &cols) {
   int iElements = rows * cols;
 
   if (Size() != iElements) {
+    if (Size() > 0) {
+      delete[] m_data;
+    }
+
     m_iElements = iElements;
-    delete[] m_data;
     m_data = new float[Size()];
   }
 }

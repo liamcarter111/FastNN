@@ -14,16 +14,16 @@
 
 int main() {
   try {
-    Cost cost = HalfSquaredError();
-    Activation hA = Linear();
-    Activation oA = Linear();
+    HalfSquaredError cost;
+    Linear hA;
+    Linear oA;
     InputLayer iL(2);
-    HiddenLayer hL(2, 2, hA);
-    OutputLayer oL(1, 2, oA);
+    HiddenLayer hL(2, 2, &hA);
+    OutputLayer oL(1, 2, &oA);
 
     std::vector<HiddenLayer> hiddenLayers({hL});
 
-    Network net(iL, hiddenLayers, oL, cost);
+    Network net(iL, hiddenLayers, oL, &cost);
 
     int iterations = 1000;
 
@@ -41,8 +41,12 @@ int main() {
       mExpected(0, 0) = i0 ^ i1;
 
       net.Optimize(mExpected);
-      std::cout << cost.GetError();
+      std::cout << "ERROR: " << cost.GetError() << ", INPUT: (" << i0 << ", "
+                << i1 << ") OUTPUT:" << oL.GetValues()(0, 0)
+                << ", EXPECTED: " << exp << "\n";
     }
+
+    std::cin;
 
     return 0;
   } catch (const std::exception &e) {

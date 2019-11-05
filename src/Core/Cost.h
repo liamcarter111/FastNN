@@ -2,9 +2,7 @@
 #include <Matrix.h>
 
 struct Cost {
-  virtual void Set(const Matrix &prediction, const Matrix &expected) {
-    m_gradients.Resize(prediction.RowSize(), prediction.ColSize());
-  }
+  virtual void Set(const Matrix &prediction, const Matrix &expected) {}
 
   const float &GetError() const { return m_error; }
 

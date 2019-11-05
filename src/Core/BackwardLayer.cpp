@@ -2,7 +2,7 @@
 #include <Matrix.h>
 
 BackwardLayer::BackwardLayer(const int size, const int previousLayerSize,
-                             Activation &activation)
+                             Activation *activation)
     : Layer(size), m_biases(1, size), m_weights(previousLayerSize, size),
       m_activation(activation) {
   m_weights.Randomize();
@@ -15,7 +15,7 @@ void BackwardLayer::BackwardProp(const Layer &pL, BackwardLayer &cL,
   // deltaBias = learningRate * error * x
   // deltaWeights = learningRate * error
 
-  gradients *= cL.GetActivation().GetGradients();
+  gradients *= cL.GetActivation()->GetGradients();
 
   const Matrix deltaBiases = gradients * learningRate;
   const Matrix deltaWeights = gradients * cL.GetValues().Transpose();
@@ -26,8 +26,8 @@ void BackwardLayer::BackwardProp(const Layer &pL, BackwardLayer &cL,
 
 const Matrix &BackwardLayer::GetWeights() const { return m_weights; }
 
-Activation &BackwardLayer::GetActivation() { return m_activation; }
+Activation *BackwardLayer::GetActivation() { return m_activation; }
 
-const Activation &BackwardLayer::GetActivation() const { return m_activation; }
+const Activation *BackwardLayer::GetActivation() const { return m_activation; }
 
 const Matrix &BackwardLayer::GetBiases() const { return m_biases; }

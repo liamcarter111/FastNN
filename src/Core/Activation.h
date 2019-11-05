@@ -3,7 +3,7 @@
 
 struct Activation {
 
-  void Set(const Matrix &weightedInputs) {}
+  virtual void Set(const Matrix &weightedInputs) {}
 
   const Matrix &GetActivations() const { return m_activations; }
 

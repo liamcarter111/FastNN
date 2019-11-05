@@ -4,5 +4,5 @@
 class OutputLayer : public BackwardLayer {
 public:
   OutputLayer(const int size, const int previousLayerSize,
-              Activation &activation);
+              Activation *activation);
 };

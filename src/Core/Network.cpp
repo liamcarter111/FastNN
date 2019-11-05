@@ -2,7 +2,7 @@
 #include <cstring>
 
 Network::Network(InputLayer &inputLayer, std::vector<HiddenLayer> &hiddenLayers,
-                 OutputLayer &outputLayer, Cost &cost)
+                 OutputLayer &outputLayer, Cost *cost)
     : m_inputLayer(inputLayer), m_outputLayer(outputLayer),
       m_hiddenLayers(hiddenLayers), m_cost(cost) {}
 
@@ -23,11 +23,11 @@ const Matrix &Network::ForwardProp() {
 float Network::Optimize(Matrix &expected) {
   constexpr float learningRate = 0.1f;
 
-  m_cost.Set(m_outputLayer.GetValues(), expected);
+  m_cost->Set(m_outputLayer.GetValues(), expected);
 
-  const float globalError = m_cost.GetError();
+  const float globalError = m_cost->GetError();
 
-  Matrix gradients = m_cost.GetGradients();
+  Matrix gradients = m_cost->GetGradients();
 
   BackwardLayer::BackwardProp(m_hiddenLayers.back(), m_outputLayer,
                               learningRate, gradients);
