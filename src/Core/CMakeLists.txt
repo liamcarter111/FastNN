@@ -4,24 +4,14 @@ SET(THIS Core)
 
 SET(SRC_LIST 
     Layer.cpp
-    InputLayer.cpp
-    OutputLayer.cpp
-    BackwardLayer.cpp
-    ForwardLayer.cpp
     Network.cpp
 )
 
 SET(HEADER_FILES 
     Activation.h
-    BackwardLayer.h
     Cost.h
-    ForwardLayer.h
-    HiddenLayer.h
-    InputLayer.h
     Layer.h
-    InputLayer.h
     Network.h
-    OutputLayer.h
 )
 
 add_library(

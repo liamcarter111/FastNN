@@ -11,11 +11,11 @@ void HalfSquaredError::Set(const Matrix &prediction, const Matrix &expected) {
 
   // get the difference
   Matrix diff = prediction - expected;
+
   // square them
-  diff *= diff;
+  diff = diff.Pow(2);
   // sum them
-  float sumOfSqaures =
-      std::accumulate(diff.Data(), diff.Data() + diff.RowSize(), 0.0f);
+  float sumOfSqaures = diff.Accumulate();
   // divide by 2.
   m_error = 0.5 * sumOfSqaures;
 

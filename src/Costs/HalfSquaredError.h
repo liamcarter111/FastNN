@@ -3,6 +3,6 @@
 #include <Cost.h>
 #include <Matrix.h>
 
-class HalfSquaredError final : public Cost {
+struct HalfSquaredError final : Cost {
   void Set(const Matrix &prediction, const Matrix &expected);
 };

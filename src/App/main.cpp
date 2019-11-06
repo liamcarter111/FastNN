@@ -1,11 +1,8 @@
 #include <Cost.h>
 #include <HalfSquaredError.h>
-#include <HiddenLayer.h>
-#include <InputLayer.h>
 #include <Linear.h>
 #include <Matrix.h>
 #include <Network.h>
-#include <OutputLayer.h>
 #include <chrono>
 #include <cstdlib>
 #include <iomanip>
@@ -17,37 +14,38 @@ int main() {
     HalfSquaredError cost;
     Linear hA;
     Linear oA;
-    InputLayer iL(2);
-    HiddenLayer hL(2, 2, &hA);
-    OutputLayer oL(1, 2, &oA);
 
-    std::vector<HiddenLayer> hiddenLayers({hL});
+    Layer hL(2, &hA);
+    Layer oL(1, &oA);
 
-    Network net(iL, hiddenLayers, oL, &cost);
+    std::vector<Layer *> layers;
+
+    layers.push_back(&hL);
+    layers.push_back(&oL);
+
+    Network net(layers, &cost);
 
     int iterations = 1000;
 
-    while (--iterations) {
+    Matrix input(2, 1);
+
+    while (iterations--) {
       int i0 = rand() % 2;
       int i1 = rand() % 2;
       int exp = i0 ^ i1;
 
-      iL.GetValues()(0, 0) = i0;
-      iL.GetValues()(1, 0) = i1;
-
-      net.ForwardProp();
+      input(0, 0) = i0;
+      input(1, 0) = i1;
 
       Matrix mExpected(1, 1);
       mExpected(0, 0) = i0 ^ i1;
 
-      net.Optimize(mExpected);
-      std::cout << "ERROR: " << (1.0f - cost.GetError()) * 100.0f
-                << ", INPUT: (" << i0 << ", " << i1
-                << ") OUTPUT:" << oL.GetValues()(0, 0) << ", EXPECTED: " << exp
-                << "\n";
-    }
+      net.Optimize(input, mExpected);
 
-    std::cin;
+      std::cout << "ERROR: " << (cost.GetError()) * 100.0f << ", INPUT: (" << i0
+                << ", " << i1 << ") OUTPUT:" << oL.GetOutput()(0, 0)
+                << ", EXPECTED: " << exp << "\n";
+    }
 
     return 0;
   } catch (const std::exception &e) {

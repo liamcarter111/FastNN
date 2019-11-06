@@ -1,21 +1,16 @@
 #pragma once
 #include "Cost.h"
-#include "HiddenLayer.h"
-#include "InputLayer.h"
-#include "OutputLayer.h"
+#include "Layer.h"
 #include <vector>
 
 class Network final {
-  Cost *&m_cost;
-  InputLayer m_inputLayer;
-  OutputLayer m_outputLayer;
-  std::vector<HiddenLayer> m_hiddenLayers;
+  Cost *m_cost;
+  std::vector<Layer *> m_layers;
 
 public:
-  Network(InputLayer &inputLayer, std::vector<HiddenLayer> &hiddenLayers,
-          OutputLayer &outputLayer, Cost *cost);
+  Network(std::vector<Layer *> &layers, Cost *cost);
 
-  const Matrix &ForwardProp();
+  const Matrix &ForwardProp(const Matrix &input);
 
-  float Optimize(Matrix &expected);
+  float Optimize(const Matrix &input, const Matrix &expected);
 };

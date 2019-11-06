@@ -3,14 +3,21 @@
 #include <Matrix.h>
 #include <vector>
 
-class Layer {
-  Matrix m_values;
+struct Layer final {
 
-public:
-  Layer(const int size);
+  Layer(const int sizeOfLayer, Activation *const activation);
 
-  const Matrix &GetValues() const;
-  Matrix &GetValues();
+  ~Layer();
 
-  const int GetSize() const;
+  const Matrix &GetOutput() const;
+
+  void ForwardProp(const Matrix &pLActivations);
+  void BackwardProp(const Matrix &pLActivations, const float &learningRate,
+                    Matrix &gradients);
+
+private:
+  const int m_sizeOfLayer;
+  Matrix m_weights;
+  Matrix m_biases;
+  Activation *const m_activation;
 };

@@ -1,17 +1,14 @@
 #pragma once
+#include <vector>
 
 struct Matrix {
   Matrix();
 
-  Matrix(const Matrix *other);
-
-  Matrix(const Matrix &other);
-
-  Matrix(Matrix &&other);
-
   Matrix(const int &iCols, const int &iRows);
 
   ~Matrix();
+
+  Matrix &operator=(const Matrix &rhs);
 
   Matrix operator-(const float &rhs) const;
 
@@ -33,15 +30,15 @@ struct Matrix {
 
   Matrix &operator*=(const float &rhs);
 
-  Matrix &operator*=(const Matrix &rhs);
-
   Matrix operator*(const Matrix &rhs) const;
-
-  Matrix &operator=(const Matrix &rhs);
 
   float &operator()(const int &row, const int &col);
 
   const float &operator()(const int &row, const int &col) const;
+
+  float Accumulate(const float init = 0.0f) const;
+
+  Matrix Pow(const int exponent) const;
 
   Matrix Hadamard(const Matrix &rhs) const;
 
@@ -55,34 +52,19 @@ struct Matrix {
 
   void Resize(const int &rows, const int &cols);
 
+  void Print() const;
+
   const int &RowSize() const { return m_iRows; }
 
   const int &ColSize() const { return m_iCols; }
 
   const int &Size() const { return m_iElements; }
 
-  const float *Data() const { return m_data; }
-  float *Data() { return m_data; }
-
-  static Matrix &ADD(Matrix &out, const Matrix &lhs, const Matrix &rhs);
-
-  static Matrix &ADD(Matrix &out, const Matrix &lhs, const float &rhs);
-
-  static Matrix &SUB(Matrix &out, const Matrix &lhs, const Matrix &rhs);
-
-  static Matrix &SUB(Matrix &out, const Matrix &lhs, const float &rhs);
-
-  static Matrix &HADAMARD(Matrix &out, const Matrix &lhs, const Matrix &rhs);
-
-  static Matrix &MUL(Matrix &out, const Matrix &lhs, const float &rhs);
-
-  static Matrix &MUL(Matrix &out, const Matrix &lhs, const Matrix &rhs);
-
-  static Matrix &TRANSPOSE(Matrix &out, const Matrix &rhs);
+  const std::vector<float> &Data() const { return m_data; }
 
 private:
   int m_iCols;
   int m_iRows;
   int m_iElements;
-  float *m_data;
+  std::vector<float> m_data;
 };
