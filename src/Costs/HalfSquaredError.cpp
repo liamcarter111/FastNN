@@ -10,7 +10,7 @@ void HalfSquaredError::Set(const Matrix &prediction, const Matrix &expected) {
   // 1/2 * sum(x' - x)^2
 
   // get the difference
-  Matrix diff = prediction - expected;
+  Matrix diff = expected - prediction;
 
   // square them
   diff = diff.Pow(2);

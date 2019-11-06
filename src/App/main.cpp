@@ -1,8 +1,8 @@
 #include <Cost.h>
 #include <HalfSquaredError.h>
-#include <Linear.h>
 #include <Matrix.h>
 #include <Network.h>
+#include <Sigmoid.h>
 #include <chrono>
 #include <cstdlib>
 #include <iomanip>
@@ -12,8 +12,8 @@
 int main() {
   try {
     HalfSquaredError cost;
-    Linear hA;
-    Linear oA;
+    Sigmoid hA;
+    Sigmoid oA;
 
     Layer hL(2, &hA);
     Layer oL(1, &oA);
@@ -40,7 +40,7 @@ int main() {
       Matrix mExpected(1, 1);
       mExpected(0, 0) = i0 ^ i1;
 
-      net.Optimize(input, mExpected);
+      net.Optimize(input, mExpected, 1.0f);
 
       std::cout << "ERROR: " << (cost.GetError()) * 100.0f << ", INPUT: (" << i0
                 << ", " << i1 << ") OUTPUT:" << oL.GetOutput()(0, 0)

@@ -1,18 +1,15 @@
 #include "Sigmoid.h"
-#include <algorithm>
 #include <cmath>
-#include <numeric>
 
-void Sigmoid::operator()(float *begin, float *const end) const {
-  while (begin != end) {
-    *begin = 1.0f / (1.0f + std::exp(-*begin));
-    ++begin;
-  }
-}
+void Sigmoid::Set(const Matrix &weightedInputs) {
 
-void Sigmoid::Derivative(float *begin, float *const end) const {
-  while (begin != end) {
-    *begin = 1.0f - *begin;
-    ++begin;
+  m_activations.Resize(weightedInputs.RowSize(), weightedInputs.ColSize());
+  m_gradients.Resize(weightedInputs.RowSize(), weightedInputs.ColSize());
+
+  for (size_t i = 0; i < m_activations.RowSize(); i++) {
+    for (size_t j = 0; j < m_activations.ColSize(); j++) {
+      m_activations(i, j) = 1.0f / (1.0f + std::exp(-weightedInputs(i, j)));
+      m_gradients(i, j) = 1.0f - m_activations(i, j);
+    }
   }
-}
+};

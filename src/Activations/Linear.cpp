@@ -1,6 +1,4 @@
 #include "Linear.h"
-#include <algorithm>
-#include <numeric>
 
 void Linear::Set(const Matrix &weightedInputs) {
   m_activations = weightedInputs;

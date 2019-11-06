@@ -2,6 +2,6 @@
 
 #include <Activation.h>
 
-struct Linear final : public Activation {
+struct Linear final : Activation {
   void Set(const Matrix &weightedInputs);
 };

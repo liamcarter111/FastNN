@@ -18,10 +18,9 @@ const Matrix &Network::ForwardProp(const Matrix &input) {
   return (*m_layers.back()).GetOutput();
 }
 
-float Network::Optimize(const Matrix &input, const Matrix &expected) {
+float Network::Optimize(const Matrix &input, const Matrix &expected,
+                        const float &learningRate) {
   ForwardProp(input);
-
-  constexpr float learningRate = 0.1f;
 
   m_cost->Set((*m_layers.back()).GetOutput(), expected);
 

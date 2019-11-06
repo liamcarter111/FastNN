@@ -12,5 +12,6 @@ public:
 
   const Matrix &ForwardProp(const Matrix &input);
 
-  float Optimize(const Matrix &input, const Matrix &expected);
+  float Optimize(const Matrix &input, const Matrix &expected,
+                 const float &learningRate);
 };

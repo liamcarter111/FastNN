@@ -6,7 +6,7 @@ SET(SRC_LIST
     #LeakyReLU.cpp
     Linear.cpp
     #ReLU.cpp
-    #Sigmoid.cpp
+    Sigmoid.cpp
     #Tanh.cpp
     #Softmax.cpp
 )
@@ -15,7 +15,7 @@ SET(HEADER_FILES
     #LeakyReLU.h
     Linear.h
     #ReLU.h
-    #Sigmoid.h
+    Sigmoid.h
     #Tanh.h
     #Softmax.h
 )
