@@ -15,6 +15,8 @@ struct Layer final {
   void BackwardProp(const Matrix &pLActivations, const float &learningRate,
                     Matrix &error);
 
+  void Print() const;
+
 private:
   const int m_sizeOfLayer;
   Matrix m_weights;

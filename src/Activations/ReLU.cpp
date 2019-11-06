@@ -1,4 +1,4 @@
-#include "ReLU.h">
+#include "ReLU.h"
 
 void ReLU::Set(const Matrix &weightedInputs) {
 

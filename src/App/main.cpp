@@ -15,7 +15,7 @@ int main() {
     Sigmoid hA;
     Sigmoid oA;
 
-    Layer hL(2, &hA);
+    Layer hL(5, &hA);
     Layer oL(1, &oA);
 
     std::vector<Layer *> layers;
@@ -25,12 +25,11 @@ int main() {
 
     Network net(layers, &cost);
 
-    // const int iterations = 10000;
     float accumulated_error = 0.0;
 
     Matrix input(2, 1);
 
-    for (size_t i = 1; true; i++) {
+    for (size_t i = 0; true; i++) {
       int i0 = rand() % 2;
       int i1 = rand() % 2;
       int exp = i0 ^ i1;
@@ -41,12 +40,20 @@ int main() {
       Matrix mExpected(1, 1);
       mExpected(0, 0) = i0 ^ i1;
 
-      float error = net.Optimize(input, mExpected, 0.2f) * 100.0f;
+      float error = net.Optimize(input, mExpected, 0.5f) * 100.0f;
+      // const float error = accumulated_error / (i + 1);
 
-      std::cout << "ERROR: " << (error) << ", INPUT: (" << i0 << ", " << i1
-                << ") OUTPUT:" << oL.GetOutput()(0, 0) << ", EXPECTED: " << exp
-                << "\n";
+      // if (i % 500000 == 0) {
+      std::cout << i << ": ERROR: " << (error) << ", INPUT: (" << i0 << ", "
+                << i1 << ") OUTPUT:" << oL.GetOutput()(0, 0)
+                << ", EXPECTED: " << exp << "\n";
+      // std::cout << std::endl << "Hidden:" << std::endl;
+      // hL.Print();
+      // std::cout << std::endl << "Output:" << std::endl;
+      oL.Print();
+      // std::cout << std::endl;
     }
+    // }
 
     return 0;
   } catch (const std::exception &e) {

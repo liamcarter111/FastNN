@@ -1,5 +1,6 @@
 #include "Layer.h"
 #include <cassert>
+#include <iostream>
 
 Layer::Layer(const int sizeOfLayer, Activation *const activation)
     : m_sizeOfLayer(sizeOfLayer), m_biases(sizeOfLayer, 1),
@@ -22,6 +23,7 @@ void Layer::ForwardProp(const Matrix &pLActivations) {
   if (m_weights.Size() == 0) {
     m_weights.Resize(m_sizeOfLayer, pLActivations.RowSize());
     m_weights.Randomize();
+    m_biases.Randomize();
   }
 
   // Multiply the neron values of the previous Layer by the weights of the
@@ -38,14 +40,20 @@ void Layer::ForwardProp(const Matrix &pLActivations) {
 void Layer::BackwardProp(const Matrix &pLActivations, const float &learningRate,
                          Matrix &error) {
 
-  Matrix gradients =
-      m_activation->GetDerivatives().Hadamard(error) * learningRate;
+  Matrix gradients = m_activation->GetDerivatives().Hadamard(error);
 
   const Matrix deltaBiases = gradients;
   const Matrix deltaWeights = gradients * pLActivations.Transpose();
 
-  error = m_weights.Transpose() * error;
+  error = m_weights.Transpose() * gradients;
 
   m_biases += m_biases.Hadamard(deltaBiases) * learningRate;
   m_weights += m_weights.Hadamard(deltaWeights) * learningRate;
+}
+
+void Layer::Print() const {
+  std::cout << "Weights:" << std::endl;
+  m_weights.Print();
+  std::cout << "Biases:" << std::endl;
+  m_biases.Print();
 }
