@@ -7,9 +7,9 @@ struct Activation {
 
   const Matrix &GetActivations() const { return m_activations; }
 
-  const Matrix &GetGradients() const { return m_gradients; }
+  const Matrix &GetDerivatives() const { return m_derivatives; }
 
 protected:
   Matrix m_activations;
-  Matrix m_gradients;
+  Matrix m_derivatives;
 };

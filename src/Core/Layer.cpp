@@ -38,13 +38,14 @@ void Layer::ForwardProp(const Matrix &pLActivations) {
 void Layer::BackwardProp(const Matrix &pLActivations, const float &learningRate,
                          Matrix &error) {
 
-  Matrix delta = error.Hadamard(m_activation->GetGradients());
+  Matrix gradients =
+      m_activation->GetDerivatives().Hadamard(error) * learningRate;
 
-  const Matrix deltaBiases = delta;
-  const Matrix deltaWeights = delta * pLActivations.Transpose();
+  const Matrix deltaBiases = gradients;
+  const Matrix deltaWeights = gradients * pLActivations.Transpose();
 
   error = m_weights.Transpose() * error;
 
-  m_biases -= m_biases.Hadamard(deltaBiases) * learningRate;
-  m_weights -= m_weights.Hadamard(deltaWeights) * learningRate;
+  m_biases += m_biases.Hadamard(deltaBiases) * learningRate;
+  m_weights += m_weights.Hadamard(deltaWeights) * learningRate;
 }

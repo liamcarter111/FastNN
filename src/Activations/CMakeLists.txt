@@ -5,7 +5,7 @@ SET(THIS Activations)
 SET(SRC_LIST 
     #LeakyReLU.cpp
     Linear.cpp
-    #ReLU.cpp
+    ReLU.cpp
     Sigmoid.cpp
     #Tanh.cpp
     #Softmax.cpp
@@ -14,7 +14,7 @@ SET(SRC_LIST
 SET(HEADER_FILES 
     #LeakyReLU.h
     Linear.h
-    #ReLU.h
+    ReLU.h
     Sigmoid.h
     #Tanh.h
     #Softmax.h
