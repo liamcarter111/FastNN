@@ -36,15 +36,14 @@ void Layer::ForwardProp(const Matrix &pLActivations) {
 }
 
 void Layer::BackwardProp(const Matrix &pLActivations, const float &learningRate,
-                         Matrix &gradients) {
+                         Matrix &error) {
 
-  // deltaBias = learningRate * error * x
-  // deltaWeights = learningRate * error
+  Matrix delta = error.Hadamard(m_activation->GetGradients());
 
-  gradients = gradients * m_activation->GetGradients();
+  const Matrix deltaBiases = delta;
+  const Matrix deltaWeights = delta * pLActivations.Transpose();
 
-  const Matrix deltaBiases = gradients;
-  const Matrix deltaWeights = gradients * pLActivations.Transpose();
+  error = m_weights.Transpose() * error;
 
   m_biases -= m_biases.Hadamard(deltaBiases) * learningRate;
   m_weights -= m_weights.Hadamard(deltaWeights) * learningRate;

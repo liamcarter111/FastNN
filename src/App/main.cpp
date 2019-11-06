@@ -15,7 +15,7 @@ int main() {
     Sigmoid hA;
     Sigmoid oA;
 
-    Layer hL(2, &hA);
+    Layer hL(3, &hA);
     Layer oL(1, &oA);
 
     std::vector<Layer *> layers;
@@ -25,7 +25,7 @@ int main() {
 
     Network net(layers, &cost);
 
-    int iterations = 1000;
+    int iterations = 10000;
 
     Matrix input(2, 1);
 
@@ -40,7 +40,7 @@ int main() {
       Matrix mExpected(1, 1);
       mExpected(0, 0) = i0 ^ i1;
 
-      net.Optimize(input, mExpected, 1.0f);
+      net.Optimize(input, mExpected, 0.1f);
 
       std::cout << "ERROR: " << (cost.GetError()) * 100.0f << ", INPUT: (" << i0
                 << ", " << i1 << ") OUTPUT:" << oL.GetOutput()(0, 0)

@@ -13,9 +13,9 @@ void HalfSquaredError::Set(const Matrix &prediction, const Matrix &expected) {
   Matrix diff = expected - prediction;
 
   // square them
-  diff = diff.Pow(2);
+  Matrix diffSqaures = diff.Pow(2);
   // sum them
-  float sumOfSqaures = diff.Accumulate();
+  float sumOfSqaures = diffSqaures.Accumulate();
   // divide by 2.
   m_error = 0.5 * sumOfSqaures;
 

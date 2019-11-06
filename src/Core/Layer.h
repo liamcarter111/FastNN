@@ -13,7 +13,7 @@ struct Layer final {
 
   void ForwardProp(const Matrix &pLActivations);
   void BackwardProp(const Matrix &pLActivations, const float &learningRate,
-                    Matrix &gradients);
+                    Matrix &error);
 
 private:
   const int m_sizeOfLayer;

@@ -26,14 +26,16 @@ float Network::Optimize(const Matrix &input, const Matrix &expected,
 
   const float globalError = m_cost->GetError();
 
-  Matrix gradients = m_cost->GetGradients();
+  Matrix error = m_cost->GetGradients();
 
   for (int i = m_layers.size() - 1; i > 0; --i) {
     (*m_layers[i])
-        .BackwardProp((*m_layers[i - 1]).GetOutput(), learningRate, gradients);
+        .BackwardProp((*m_layers[i - 1]).GetOutput(), learningRate, error);
   }
 
-  (*m_layers.back()).BackwardProp(input, learningRate, gradients);
+  // Run the back prop on the first hidden layer seperatly as we need to give it
+  // the input.
+  (*m_layers.front()).BackwardProp(input, learningRate, error);
 
   return globalError;
 };

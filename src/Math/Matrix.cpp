@@ -126,6 +126,9 @@ Matrix Matrix::Pow(const int exponent) const {
 }
 
 Matrix Matrix::Hadamard(const Matrix &rhs) const {
+  assert(ColSize() == rhs.ColSize());
+  assert(RowSize() == rhs.RowSize());
+
   Matrix result(RowSize(), ColSize());
 
   for (int i = 0; i < Size(); i++) {
