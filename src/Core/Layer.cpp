@@ -66,7 +66,7 @@ void Layer::BackwardProp(const Matrix &pLActivations, const float &learningRate,
   std::cout << "Bias:" << std::endl;
   m_biases.Print();
 
-  // std::cout << "Delta Bias:" << std::endl;
+   std::cout << "Delta Bias:" << std::endl;
    deltaBiases.Print();
 
 #endif
