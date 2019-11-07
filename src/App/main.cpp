@@ -2,9 +2,9 @@
 #include <HalfSquaredError.h>
 #include <Matrix.h>
 #include <Network.h>
+#include <Random.h>
 #include <Sigmoid.h>
 #include <chrono>
-#include <cstdlib>
 #include <iomanip>
 #include <iostream>
 #include <vector>
@@ -15,7 +15,7 @@ int main() {
     Sigmoid hA;
     Sigmoid oA;
 
-    Layer hL(5, &hA);
+    Layer hL(3, &hA);
     Layer oL(1, &oA);
 
     std::vector<Layer *> layers;
@@ -30,8 +30,9 @@ int main() {
     Matrix input(2, 1);
 
     for (size_t i = 0; true; i++) {
-      int i0 = rand() % 2;
-      int i1 = rand() % 2;
+      int i0 = Random::Binary();
+      int i1 = Random::Binary();
+
       int exp = i0 ^ i1;
 
       input(0, 0) = i0;
@@ -40,20 +41,22 @@ int main() {
       Matrix mExpected(1, 1);
       mExpected(0, 0) = i0 ^ i1;
 
-      float error = net.Optimize(input, mExpected, 0.5f) * 100.0f;
-      // const float error = accumulated_error / (i + 1);
+      float error = net.Optimize(input, mExpected, 0.001f) * 100.0f;
 
-      // if (i % 500000 == 0) {
-      std::cout << i << ": ERROR: " << (error) << ", INPUT: (" << i0 << ", "
-                << i1 << ") OUTPUT:" << oL.GetOutput()(0, 0)
-                << ", EXPECTED: " << exp << "\n";
-      // std::cout << std::endl << "Hidden:" << std::endl;
-      // hL.Print();
-      // std::cout << std::endl << "Output:" << std::endl;
-      oL.Print();
-      // std::cout << std::endl;
+      if (i % 1000 == 0) {
+        std::cout << std::fixed << std::setprecision(2);
+        std::cout << i << ": ERROR: " << (error) << ", INPUT: (" << i0 << ", "
+                  << i1 << ") OUTPUT:" << oL.GetOutput()(0, 0)
+                  << ", EXPECTED: " << exp << "\n";
+
+        // std::cout << std::endl << "Hidden:" << std::endl;
+        // hL.Print();
+        // std::cout << std::endl << "Output:" << std::endl;
+        // oL.Print();
+        // std::cout << std::endl;
+      }
+      // std::cin.get();
     }
-    // }
 
     return 0;
   } catch (const std::exception &e) {

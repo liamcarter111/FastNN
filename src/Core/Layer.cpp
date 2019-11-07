@@ -9,11 +9,6 @@ Layer::Layer(const int sizeOfLayer, Activation *const activation)
   assert(activation != nullptr);
 }
 
-Layer::~Layer() {
-  // why?
-  int i = 0;
-}
-
 const Matrix &Layer::GetOutput() const {
   return m_activation->GetActivations();
 }
@@ -40,15 +35,38 @@ void Layer::ForwardProp(const Matrix &pLActivations) {
 void Layer::BackwardProp(const Matrix &pLActivations, const float &learningRate,
                          Matrix &error) {
 
-  Matrix gradients = m_activation->GetDerivatives().Hadamard(error);
+  // Get the gradient
+  Matrix gradient = error.Hadamard(m_activation->GetDerivatives());
+  // Calculate the gradient for the previous layer.
+  error = m_weights.Transpose() * gradient;
 
-  const Matrix deltaBiases = gradients;
-  const Matrix deltaWeights = gradients * pLActivations.Transpose();
+  const Matrix deltaBiases = gradient * learningRate;
+  const Matrix deltaWeights =
+      gradient * (pLActivations.Transpose()) * learningRate;
 
-  error = m_weights.Transpose() * gradients;
+  /*
+    std::cout << "##########Layer##########" << std::endl;
+    std::cout << "Error:" << std::endl;
+    error.Print();
 
-  m_biases += m_biases.Hadamard(deltaBiases) * learningRate;
-  m_weights += m_weights.Hadamard(deltaWeights) * learningRate;
+    std::cout << "Gradient:" << std::endl;
+    gradient.Print();
+
+    std::cout << "Weights:" << std::endl;
+    m_weights.Print();
+
+    std::cout << "Delta Weights:" << std::endl;
+    deltaWeights.Print();
+
+    std::cout << "Bias:" << std::endl;
+    m_biases.Print();
+
+    std::cout << "Delta Bias:" << std::endl;
+    deltaBiases.Print();
+  */
+
+  m_biases -= m_biases.Hadamard(deltaBiases);
+  m_weights -= m_weights.Hadamard(deltaWeights);
 }
 
 void Layer::Print() const {

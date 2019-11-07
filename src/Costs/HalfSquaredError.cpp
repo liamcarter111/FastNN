@@ -1,5 +1,6 @@
 #include "HalfSquaredError.h"
 #include <cassert>
+#include <iostream>
 #include <numeric>
 
 void HalfSquaredError::Set(const Matrix &prediction, const Matrix &expected) {
@@ -10,7 +11,7 @@ void HalfSquaredError::Set(const Matrix &prediction, const Matrix &expected) {
   // 1/2 * sum(x' - x)^2
 
   // get the difference
-  Matrix diff = expected - prediction;
+  Matrix diff = prediction - expected;
 
   // square them
   Matrix diffSqaures = diff.Pow(2);
@@ -19,10 +20,8 @@ void HalfSquaredError::Set(const Matrix &prediction, const Matrix &expected) {
   // divide by 2.
   m_error = 0.5 * sumOfSqaures;
 
-  // get the partial derivative for the error.
-  // power rule -> 1/2 * 2 * (x' - x)
-  // = (x' - x)
-
-  // get the difference, thats it
+  // Get the partial derivative for the error.
   m_gradients = diff;
+  // std::cout << "ERROR GRADIENT:" << prediction(0, 0) - expected(0, 0)
+  //           << std::endl;
 };

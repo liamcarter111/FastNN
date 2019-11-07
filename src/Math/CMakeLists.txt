@@ -4,10 +4,12 @@ SET(THIS Math)
 
 SET(SRC_LIST 
     Matrix.cpp
+    Random.cpp
 )
 
 SET(HEADER_FILES 
     Matrix.h
+    Random.h
 )
 
 add_library(

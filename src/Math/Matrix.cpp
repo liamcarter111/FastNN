@@ -1,8 +1,8 @@
 #include "Matrix.h"
+#include "Random.h"
 #include <algorithm>
 #include <cassert>
 #include <cmath>
-#include <cstdlib>
 #include <cstring>
 #include <iostream>
 #include <numeric>
@@ -12,11 +12,6 @@ Matrix::Matrix() : m_iCols(0), m_iRows(0), m_iElements(0){};
 Matrix::Matrix(const int &iRows, const int &iCols)
     : m_iCols(iCols), m_iRows(iRows), m_iElements(RowSize() * ColSize()),
       m_data(m_iElements) {}
-
-Matrix::~Matrix() {
-  // why?
-  int i = 0;
-}
 
 Matrix &Matrix::operator=(const Matrix &rhs) {
   Resize(rhs.RowSize(), rhs.ColSize());
@@ -83,6 +78,14 @@ Matrix Matrix::operator*(const Matrix &rhs) const {
   return result;
 }
 
+Matrix Matrix::operator-() const {
+  Matrix result(*this);
+  for (int i = 0; i < Size(); i++) {
+    result.m_data.at(i) = -result.m_data.at(i);
+  }
+  return result;
+}
+
 Matrix Matrix::operator-(const float &rhs) const {
   return Matrix(*this) -= rhs;
 }
@@ -116,10 +119,10 @@ float Matrix::Accumulate(const float init) const {
 }
 
 Matrix Matrix::Pow(const int exponent) const {
-  Matrix result(RowSize(), ColSize());
+  Matrix result(*this);
 
   for (int i = 0; i < Size(); i++) {
-    result.m_data.at(i) = std::pow(m_data.at(i), exponent);
+    result.m_data.at(i) = std::pow(result.m_data.at(i), exponent);
   }
 
   return result;
@@ -129,10 +132,10 @@ Matrix Matrix::Hadamard(const Matrix &rhs) const {
   assert(ColSize() == rhs.ColSize());
   assert(RowSize() == rhs.RowSize());
 
-  Matrix result(RowSize(), ColSize());
+  Matrix result(*this);
 
   for (int i = 0; i < Size(); i++) {
-    result.m_data.at(i) = m_data.at(i) * rhs.m_data.at(i);
+    result.m_data.at(i) = result.m_data.at(i) * rhs.m_data.at(i);
   }
 
   return result;
@@ -159,7 +162,7 @@ void Matrix::Fill(const float &v) {
 
 void Matrix::Randomize() {
   for (int i = 0; i < Size(); i++) {
-    m_data.at(i) = (float)rand() / RAND_MAX;
+    m_data.at(i) = Random::Normalized();
   }
 }
 

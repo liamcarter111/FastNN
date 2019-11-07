@@ -4,10 +4,7 @@
 #include <vector>
 
 struct Layer final {
-
   Layer(const int sizeOfLayer, Activation *const activation);
-
-  ~Layer();
 
   const Matrix &GetOutput() const;
 
