@@ -9,7 +9,7 @@ struct Layer final {
   const Matrix &GetOutput() const;
 
   void ForwardProp(const Matrix &pLActivations);
-  void BackwardProp(const Matrix &pLActivations, const float &learningRate,
+  void BackwardProp(const Matrix &pLInput, const float &learningRate,
                     Matrix &error);
 
   void Print() const;
@@ -18,5 +18,6 @@ private:
   const int m_sizeOfLayer;
   Matrix m_weights;
   Matrix m_biases;
+  Matrix m_momentum;
   Activation *const m_activation;
 };

@@ -15,7 +15,7 @@ int main() {
     Sigmoid hA;
     Sigmoid oA;
 
-    Layer hL(3, &hA);
+    Layer hL(2, &hA);
     Layer oL(1, &oA);
 
     std::vector<Layer *> layers;
@@ -39,9 +39,9 @@ int main() {
       input(1, 0) = i1;
 
       Matrix mExpected(1, 1);
-      mExpected(0, 0) = i0 ^ i1;
+      mExpected(0, 0) = exp;
 
-      float error = net.Optimize(input, mExpected, 0.001f) * 100.0f;
+      float error = net.Optimize(input, mExpected, 0.01f);
 
       if (i % 1000 == 0) {
         std::cout << std::fixed << std::setprecision(2);

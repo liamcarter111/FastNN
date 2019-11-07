@@ -17,6 +17,8 @@ void Layer::ForwardProp(const Matrix &pLActivations) {
 
   if (m_weights.Size() == 0) {
     m_weights.Resize(m_sizeOfLayer, pLActivations.RowSize());
+    m_momentum.Resize(m_sizeOfLayer, pLActivations.RowSize());
+    m_momentum.Zero();
     m_weights.Randomize();
     m_biases.Randomize();
   }
@@ -37,36 +39,44 @@ void Layer::BackwardProp(const Matrix &pLActivations, const float &learningRate,
 
   // Get the gradient
   Matrix gradient = error.Hadamard(m_activation->GetDerivatives());
-  // Calculate the gradient for the previous layer.
-  error = m_weights.Transpose() * gradient;
 
   const Matrix deltaBiases = gradient * learningRate;
   const Matrix deltaWeights =
-      gradient * (pLActivations.Transpose()) * learningRate;
+      (gradient * (pLActivations.Transpose()) * learningRate) - m_momentum;
 
-  /*
-    std::cout << "##########Layer##########" << std::endl;
-    std::cout << "Error:" << std::endl;
-    error.Print();
+#if 0
 
-    std::cout << "Gradient:" << std::endl;
-    gradient.Print();
+  std::cout << "##########Layer##########" << std::endl;
 
-    std::cout << "Weights:" << std::endl;
-    m_weights.Print();
+  std::cout << "PrevOutput:" << std::endl;
+  pLActivations.Print();
 
-    std::cout << "Delta Weights:" << std::endl;
-    deltaWeights.Print();
+  std::cout << "Error:" << std::endl;
+  error.Print();
 
-    std::cout << "Bias:" << std::endl;
-    m_biases.Print();
+  std::cout << "Gradient:" << std::endl;
+  gradient.Print();
 
-    std::cout << "Delta Bias:" << std::endl;
-    deltaBiases.Print();
-  */
+  std::cout << "Weights:" << std::endl;
+  m_weights.Print();
+
+  std::cout << "Delta Weights:" << std::endl;
+  deltaWeights.Print();
+
+  std::cout << "Bias:" << std::endl;
+  m_biases.Print();
+
+  // std::cout << "Delta Bias:" << std::endl;
+   deltaBiases.Print();
+
+#endif
 
   m_biases -= m_biases.Hadamard(deltaBiases);
   m_weights -= m_weights.Hadamard(deltaWeights);
+
+  // Calculate the gradient for the previous layer.
+  error = m_weights.Transpose() * gradient;
+  m_momentum = deltaWeights;
 }
 
 void Layer::Print() const {
