@@ -17,10 +17,15 @@ void Layer::ForwardProp(const Matrix &pLActivations) {
 
   if (m_weights.Size() == 0) {
     m_weights.Resize(m_sizeOfLayer, pLActivations.RowSize());
-    m_momentum.Resize(m_sizeOfLayer, pLActivations.RowSize());
-    m_momentum.Zero();
+
     m_weights.Randomize();
     m_biases.Randomize();
+
+    m_weightsMomentum.Resize(m_weights.RowSize(), m_weights.ColSize());
+    m_biasesMomentum.Resize(m_biases.RowSize(), m_biases.ColSize());
+
+    m_weightsMomentum.Zero();
+    m_biasesMomentum.Zero();
   }
 
   // Multiply the neron values of the previous Layer by the weights of the
@@ -42,7 +47,7 @@ void Layer::BackwardProp(const Matrix &pLActivations, const float &learningRate,
 
   const Matrix deltaBiases = gradient * learningRate;
   const Matrix deltaWeights =
-      (gradient * (pLActivations.Transpose()) * learningRate) - m_momentum;
+      (gradient * (pLActivations.Transpose()) * learningRate);
 
 #if 0
 
@@ -71,12 +76,14 @@ void Layer::BackwardProp(const Matrix &pLActivations, const float &learningRate,
 
 #endif
 
-  m_biases -= m_biases.Hadamard(deltaBiases);
-  m_weights -= m_weights.Hadamard(deltaWeights);
+  m_biases -= m_biases.Hadamard(deltaBiases + m_biasesMomentum);
+  m_weights -= m_weights.Hadamard(deltaWeights + m_weightsMomentum);
 
   // Calculate the gradient for the previous layer.
   error = m_weights.Transpose() * gradient;
-  m_momentum = deltaWeights;
+
+  m_weightsMomentum = deltaWeights;
+  m_biasesMomentum = deltaBiases;
 }
 
 void Layer::Print() const {

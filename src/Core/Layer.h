@@ -18,6 +18,7 @@ private:
   const int m_sizeOfLayer;
   Matrix m_weights;
   Matrix m_biases;
-  Matrix m_momentum;
+  Matrix m_weightsMomentum;
+  Matrix m_biasesMomentum;
   Activation *const m_activation;
 };
