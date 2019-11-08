@@ -3,11 +3,15 @@ cmake_minimum_required(VERSION 3.0.0)
 SET(THIS Costs)
 
 SET(SRC_LIST 
-    HalfSquaredError.cpp
+    SquaredError.cpp
+    MeanSquaredError.cpp
+    RootSquaredError.cpp
 )
 
 SET(HEADER_FILES 
-    HalfSquaredError.h
+    SquaredError.h
+    MeanSquaredError.cpp
+    RootSquaredError.h
 )
 
 add_library(

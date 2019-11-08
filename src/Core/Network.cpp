@@ -2,38 +2,47 @@
 #include <cassert>
 #include <cstring>
 
-Network::Network(std::vector<Layer *> &layers, Cost *cost)
+Network::Network(const int inputSize, std::vector<Layer *> &layers, Cost *cost)
     : m_layers(layers), m_cost(cost) {
   assert(layers.size() > 0);
 }
 
 const Matrix &Network::ForwardProp(const Matrix &input) {
 
-  (*m_layers.front()).ForwardProp(input);
+  const Matrix *previousLayerOutput = &input;
 
-  for (int i = 1; i < m_layers.size(); ++i) {
-    (*m_layers[i]).ForwardProp((*m_layers[i - 1]).GetOutput());
+  // Run through all the layers (forwards).
+  for (int i = 0; i < m_layers.size(); ++i) {
+    Layer &currentLayer = *m_layers[i];
+    currentLayer.ForwardProp(*previousLayerOutput);
+    previousLayerOutput = &currentLayer.GetOutput();
   }
 
-  return (*m_layers.back()).GetOutput();
+  return *previousLayerOutput;
 }
 
-float Network::Optimize(const Matrix &input, const Matrix &expected,
-                        const float &learningRate) {
+double Network::Optimize(const Matrix &input, const Matrix &expected,
+                         const double learningRate, const double momentumRate) {
   Matrix output = ForwardProp(input);
 
   m_cost->Set(output, expected);
 
-  const float globalError = m_cost->GetError();
+  const double globalError = m_cost->GetError();
 
   Matrix error = m_cost->GetGradients();
 
-  for (int i = m_layers.size() - 1; i >= 0; --i) {
+  // Run through all the layers except the last (backwards).
+  for (int i = m_layers.size() - 1; i > 0; --i) {
+    Layer &currentLayer = *m_layers[i];
+    Layer &previousLayer = *m_layers[i - 1];
 
-    (*m_layers[i])
-        .BackwardProp(i == 0 ? input : (*m_layers[i - 1]).GetOutput(),
-                      learningRate, error);
+    currentLayer.BackwardProp(previousLayer.GetOutput(), error, learningRate,
+                              momentumRate);
   }
+
+  // Call the first layer with the network input.
+  Layer &lastLayer = *m_layers.front();
+  lastLayer.BackwardProp(input, error, learningRate, momentumRate);
 
   return globalError;
 };

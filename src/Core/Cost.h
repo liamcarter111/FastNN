@@ -4,11 +4,11 @@
 struct Cost {
   virtual void Set(const Matrix &prediction, const Matrix &expected) {}
 
-  const float &GetError() const { return m_error; }
+  const double &GetError() const { return m_error; }
 
   const Matrix &GetGradients() const { return m_gradients; }
 
 protected:
-  float m_error;
+  double m_error;
   Matrix m_gradients;
 };

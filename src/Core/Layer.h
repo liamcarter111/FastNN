@@ -9,10 +9,17 @@ struct Layer final {
   const Matrix &GetOutput() const;
 
   void ForwardProp(const Matrix &pLActivations);
-  void BackwardProp(const Matrix &pLInput, const float &learningRate,
-                    Matrix &error);
+  void BackwardProp(const Matrix &pLActivations, Matrix &error,
+                    const double learningRate, const double momentumRate);
 
   void Print() const;
+
+  void Init(const int previousLayerSize);
+
+  void Init(const int previousLayerSize, const Matrix &weights,
+            const Matrix &biases);
+
+  const int &GetSize() const;
 
 private:
   const int m_sizeOfLayer;

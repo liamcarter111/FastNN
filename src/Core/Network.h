@@ -8,10 +8,10 @@ class Network final {
   std::vector<Layer *> m_layers;
 
 public:
-  Network(std::vector<Layer *> &layers, Cost *cost);
+  Network(const int inputSize, std::vector<Layer *> &layers, Cost *cost);
 
   const Matrix &ForwardProp(const Matrix &input);
 
-  float Optimize(const Matrix &input, const Matrix &expected,
-                 const float &learningRate);
+  double Optimize(const Matrix &input, const Matrix &expected,
+                  const double learningRate, const double momentumRate);
 };

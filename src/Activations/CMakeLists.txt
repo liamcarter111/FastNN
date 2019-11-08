@@ -7,7 +7,7 @@ SET(SRC_LIST
     Linear.cpp
     ReLU.cpp
     Sigmoid.cpp
-    #Tanh.cpp
+    Tanh.cpp
     #Softmax.cpp
 )
 
@@ -16,7 +16,7 @@ SET(HEADER_FILES
     Linear.h
     ReLU.h
     Sigmoid.h
-    #Tanh.h
+    Tanh.h
     #Softmax.h
 )
 

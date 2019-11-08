@@ -8,8 +8,8 @@ void Sigmoid::Set(const Matrix &weightedInputs) {
 
   for (size_t i = 0; i < m_activations.RowSize(); i++) {
     for (size_t j = 0; j < m_activations.ColSize(); j++) {
-      m_activations(i, j) = 1.0f / (1.0f + std::exp(-weightedInputs(i, j)));
-      m_derivatives(i, j) = m_activations(i, j) * (1.0f - m_activations(i, j));
+      m_activations(i, j) = 1.0 / (1.0 + std::exp(-weightedInputs(i, j)));
+      m_derivatives(i, j) = m_activations(i, j) * (1.0 - m_activations(i, j));
     }
   }
 };
