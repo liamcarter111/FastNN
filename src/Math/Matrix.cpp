@@ -170,11 +170,12 @@ void Matrix::Resize(const int &rows, const int &cols) {
 }
 
 void Matrix::Print(const int precision) const {
+  const int precisionScalingFactor = std::pow(10, precision);
   for (unsigned i = 0; i < RowSize(); i++) {
     for (unsigned j = 0; j < ColSize(); j++) {
       std::cout << std::fixed << std::setprecision(precision) << "["
-                << std::round((*this)(i, j) * (10 * precision)) /
-                       (precision * 10)
+                << std::ceil((*this)(i, j) * precisionScalingFactor) /
+                       precisionScalingFactor
                 << "] " << std::setprecision(-1) << std::defaultfloat;
     }
     std::cout << std::endl;

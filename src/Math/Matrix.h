@@ -50,7 +50,7 @@ struct Matrix {
 
   void Resize(const int &rows, const int &cols);
 
-  void Print(const int precision = 10) const;
+  void Print(const int precision = 3) const;
 
   const int &RowSize() const { return m_iRows; }
 
