@@ -48,7 +48,7 @@ void Layer::BackwardProp(const Matrix &pLActivations, Matrix &error,
   const Matrix deltaBiases = gradient;
   const Matrix deltaWeights = (gradient * (pLActivations.Transpose()));
 
-#if 1
+#if 0
 
   std::cout << "##########Layer##########" << std::endl;
 
@@ -84,15 +84,14 @@ void Layer::BackwardProp(const Matrix &pLActivations, Matrix &error,
   // Calculate the gradient for the previous layer.
   error = m_weights.Transpose() * gradient;
 
-  m_biases += m_biases.Hadamard(deltaBiases * learningRate +
+  m_biases -= m_biases.Hadamard(deltaBiases * learningRate +
                                 m_biasesMomentum * momentumRate);
-  m_weights += m_weights.Hadamard(deltaWeights * learningRate +
+  m_weights -= m_weights.Hadamard(deltaWeights * learningRate +
                                   m_weightsMomentum * momentumRate);
 
   m_weightsMomentum = deltaWeights;
   m_biasesMomentum = deltaBiases;
 }
-
 void Layer::Print() const {
   std::cout << "Weights:" << std::endl;
   m_weights.Print();

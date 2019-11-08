@@ -6,10 +6,6 @@ struct Matrix {
 
   Matrix(const int &iCols, const int &iRows);
 
-  /*
-    Matrix &operator=(const Matrix &rhs);
-    */
-
   Matrix operator-() const;
 
   Matrix operator-(const double &rhs) const;

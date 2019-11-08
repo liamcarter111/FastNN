@@ -20,75 +20,77 @@ int main() {
     srand(time(0));
 
     RootSquaredError cost;
-    Tanh hA1;
-    // ReLU hA2;
-    Tanh oA;
+    ReLU hA1;
+    ReLU oA;
 
-    Layer hL1(2, &hA1);
-    // Layer hL2(6, &hA2);
+    Layer hL1(4, &hA1);
     Layer oL(1, &oA);
 
-    /*
-        Matrix m1(hL1.GetSize(), 2);
-        Matrix m2(oL.GetSize(), hL1.GetSize());
-
-        m1.Randomize();
-        m2.Randomize();
-
-        Matrix b1(hL1.GetSize(), 1);
-        Matrix b2(oL.GetSize(), 1);
-
-        b1.Randomize();
-        b2.Randomize();
-
-        hL1.Init(2, m1, b1);
-        oL.Init(4, m2, b2);
-        */
-
     hL1.Init(2);
-    // hL2.Init(hL1.GetSize());
     oL.Init(hL1.GetSize());
 
     std::vector<Layer *> layers;
 
     layers.push_back(&hL1);
-    // layers.push_back(&hL2);
     layers.push_back(&oL);
 
     Network net(2, layers, &cost);
 
-    // double accumulated_error = 0.0;
+    std::vector<Matrix> trainingInputs(4);
+    std::vector<Matrix> traningExpectations(4);
 
-    Matrix input(2, 1);
+    // 0 ^ 0 = 0
+    trainingInputs[0].Resize(2, 1);
+    traningExpectations[0].Resize(1, 1);
+    trainingInputs[0](0, 0) = 0;
+    trainingInputs[0](1, 0) = 0;
+    traningExpectations[0](0, 0) = 0;
+
+    // 0 ^ 1 = 1
+    trainingInputs[1].Resize(2, 1);
+    traningExpectations[1].Resize(1, 1);
+    trainingInputs[1](0, 0) = 0;
+    trainingInputs[1](1, 0) = 1;
+    traningExpectations[1](0, 0) = 1;
+
+    // 1 ^ 1 = 0
+    trainingInputs[2].Resize(2, 1);
+    traningExpectations[2].Resize(1, 1);
+    trainingInputs[2](0, 0) = 1;
+    trainingInputs[2](1, 0) = 1;
+    traningExpectations[2](0, 0) = 0;
+
+    // 1 ^ 0 = 1
+    trainingInputs[3].Resize(2, 1);
+    traningExpectations[3].Resize(1, 1);
+    trainingInputs[3](0, 0) = 1;
+    trainingInputs[3](1, 0) = 0;
+    traningExpectations[3](0, 0) = 1;
 
     for (size_t i = 1; true; i++) {
-      int i0 = rand() % 2;
-      int i1 = rand() % 2;
+      int iTrainingSet = rand() % 4;
+      const Matrix &trainingInput = trainingInputs[iTrainingSet];
+      const Matrix &trainingExpected = traningExpectations[iTrainingSet];
 
-      int exp = i0 ^ i1;
-
-      input(0, 0) = (double)i0;
-      input(1, 0) = (double)i1;
-
-      Matrix mExpected(1, 1);
-      mExpected(0, 0) = (double)exp;
-
-      std::cin.get();
+      // std::cin.get();
       // std::cout << std::endl << "Hidden:" << std::endl;
       // hL1.Print();
 
-      const double error = net.Optimize(input, mExpected, 1, 1);
+      const double error =
+          net.Optimize(trainingInput, trainingExpected, 0.1, 0.5);
 
-      if (i % 1 == 0) {
-        std::cout << std::fixed;
-        std::cout << std::setw(8) << std::right << (i / 1) << std::setfill('0')
-                  << std::setprecision(3)
-                  << ": ERROR: " << std::round(error * 1000) / 1000
-                  << ", INPUT: (" << i0 << ", " << i1 << ")"
-                  << " OUTPUT:"
-                  << std::round(oL.GetOutput()(0, 0) * 1000) / 1000
-                  << ", EXPECTED: " << exp << "\n"
+      if (i % 100 == 0) {
+        std::cout << std::fixed << std::setw(8) << std::right << (i / 1)
+                  << std::setfill('0') << std::setprecision(3)
+                  << ": ERROR: " << std::round(error * 1000) / 1000 << std::endl
                   << std::setprecision(-1) << std::defaultfloat;
+        std::cout << "INPUT:" << std::endl;
+        trainingInput.Print();
+        std::cout << "EXPECTED:" << std::endl;
+        trainingExpected.Print();
+        std::cout << "OUTPUT:" << std::endl;
+        oL.GetOutput().Print();
+        std::cout << std::endl << std::endl;
 
         // std::cout << std::endl << "Hidden:" << std::endl;
         // hL2.Print();
