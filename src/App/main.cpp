@@ -1,17 +1,10 @@
-#include <Cost.h>
-#include <Linear.h>
 #include <Matrix.h>
 #include <Network.h>
-#include <ReLU.h>
-#include <RootSquaredError.h>
 #include <Sigmoid.h>
-#include <Tanh.h>
-#include <chrono>
+#include <SquaredError.h>
 #include <cmath>
-#include <cstdlib>
 #include <iomanip>
 #include <iostream>
-#include <numeric>
 #include <time.h>
 #include <vector>
 
@@ -19,7 +12,7 @@ int main() {
   try {
     srand(time(0));
 
-    RootSquaredError cost;
+    SquaredError cost;
     Sigmoid hA1;
     Sigmoid oA;
 
