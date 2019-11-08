@@ -81,13 +81,12 @@ void Layer::BackwardProp(const Matrix &pLActivations, Matrix &error,
 
 #endif
 
-  // Calculate the gradient for the previous layer.
+  // Calculate the gradient for the previous layer (remember the next layer is
+  // the previous we are going backwards).
   error = m_weights.Transpose() * gradient;
 
-  m_biases -= m_biases.Hadamard(deltaBiases * learningRate +
-                                m_biasesMomentum * momentumRate);
-  m_weights -= m_weights.Hadamard(deltaWeights * learningRate +
-                                  m_weightsMomentum * momentumRate);
+  m_biases -= deltaBiases * learningRate + m_biasesMomentum * momentumRate;
+  m_weights -= deltaWeights * learningRate + m_weightsMomentum * momentumRate;
 
   m_weightsMomentum = deltaWeights;
   m_biasesMomentum = deltaBiases;

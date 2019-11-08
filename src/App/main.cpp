@@ -20,8 +20,8 @@ int main() {
     srand(time(0));
 
     RootSquaredError cost;
-    ReLU hA1;
-    ReLU oA;
+    Sigmoid hA1;
+    Sigmoid oA;
 
     Layer hL1(4, &hA1);
     Layer oL(1, &oA);
@@ -67,36 +67,27 @@ int main() {
     trainingInputs[3](1, 0) = 0;
     traningExpectations[3](0, 0) = 1;
 
-    for (size_t i = 1; true; i++) {
+    for (size_t i = 0; i < 30000; i++) {
       int iTrainingSet = rand() % 4;
       const Matrix &trainingInput = trainingInputs[iTrainingSet];
       const Matrix &trainingExpected = traningExpectations[iTrainingSet];
 
-      // std::cin.get();
-      // std::cout << std::endl << "Hidden:" << std::endl;
-      // hL1.Print();
+      double error = net.Optimize(trainingInput, trainingExpected, 0.1, 0.75);
 
-      const double error =
-          net.Optimize(trainingInput, trainingExpected, 0.1, 0.5);
-
-      if (i % 100 == 0) {
+      if (i % 10000 == 0) {
         std::cout << std::fixed << std::setw(8) << std::right << (i / 1)
                   << std::setfill('0') << std::setprecision(3)
                   << ": ERROR: " << std::round(error * 1000) / 1000 << std::endl
                   << std::setprecision(-1) << std::defaultfloat;
-        std::cout << "INPUT:" << std::endl;
-        trainingInput.Print();
-        std::cout << "EXPECTED:" << std::endl;
-        trainingExpected.Print();
-        std::cout << "OUTPUT:" << std::endl;
-        oL.GetOutput().Print();
-        std::cout << std::endl << std::endl;
-
-        // std::cout << std::endl << "Hidden:" << std::endl;
-        // hL2.Print();
-        // std::cout << std::endl << "Output:" << std::endl;
-        // oL.Print();
-        // std::cout << std::endl;
+        /*
+std::cout << "INPUT:" << std::endl;
+trainingInput.Print();
+std::cout << "EXPECTED:" << std::endl;
+trainingExpected.Print();
+std::cout << "OUTPUT:" << std::endl;
+oL.GetOutput().Print();
+std::cout << std::endl << std::endl;
+*/
       }
     }
 
