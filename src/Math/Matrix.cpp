@@ -135,14 +135,21 @@ Matrix Matrix::Hadamard(const Matrix &rhs) const {
 }
 
 Matrix Matrix::Transpose() const {
-  Matrix result(ColSize(), RowSize());
+  if (ColSize() == 1 || RowSize() == 1) {
+    Matrix result(*this);
+    result.m_iRows = ColSize();
+    result.m_iCols = RowSize();
+    return result;
+  } else {
+    Matrix result(ColSize(), RowSize());
 
-  for (int i = 0; i < ColSize(); i++) {
-    for (int j = 0; j < RowSize(); j++) {
-      result(i, j) = (*this)(j, i);
+    for (int i = 0; i < ColSize(); i++) {
+      for (int j = 0; j < RowSize(); j++) {
+        result(i, j) = (*this)(j, i);
+      }
     }
+    return result;
   }
-  return result;
 }
 
 void Matrix::Zero() { Fill(0.0); }
@@ -165,8 +172,12 @@ void Matrix::Randomize() {
 void Matrix::Resize(const int &rows, const int &cols) {
   m_iRows = rows;
   m_iCols = cols;
-  m_iElements = rows * cols;
-  m_data.resize(m_iElements);
+  int newSize = rows * cols;
+
+  if (newSize != m_iElements) {
+    m_iElements = newSize;
+    m_data.resize(m_iElements);
+  }
 }
 
 void Matrix::Print(const int precision) const {
