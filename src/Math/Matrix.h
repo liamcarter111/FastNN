@@ -64,6 +64,12 @@ struct Matrix {
 
   const int &RowSize() const { return m_iRows; }
 
+  static Matrix &FILL(Matrix &out, const float &v);
+
+  static Matrix &RANDOM(Matrix &out);
+
+  static Matrix &TRANSPOSE(Matrix &out);
+
   const int &ColSize() const { return m_iCols; }
 
   const int &Size() const { return m_iElements; }
