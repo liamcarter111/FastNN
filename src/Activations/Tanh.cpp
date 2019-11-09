@@ -1,13 +1,9 @@
 #include "Tanh.h"
-#include <algorithm>
 #include <cmath>
-#include <numeric>
 
-void Tanh::operator()(float *begin, float *const end) const {
-  std::fill(begin, end, std::tanh(std::accumulate(begin, end, 0.0f)));
-}
-
-void Tanh::Derivative(float *begin, float *const end) const {
-  std::fill(begin, end,
-            1.0f - std::pow(std::tanh(std::accumulate(begin, end, 0.0f)), 2));
+void Tanh::Set(const Matrix &weightedInputs) {
+  m_activations =
+      weightedInputs.Map([](const double &val) { return std::tanh(val); });
+  m_derivatives =
+      m_activations.Map([](const double &val) { return 1.0 - (val * val); });
 }

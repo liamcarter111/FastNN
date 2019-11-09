@@ -1,15 +1,14 @@
 #pragma once
+#include <Matrix.h>
 
 struct Cost {
-  Cost() {}
-  /**
-   */
-  virtual float operator()(const float *actualBegin,
-                           const float *const actualEnd,
-                           const float *expectedBegin) const = 0;
-  /**
-   */
-  virtual float Derivative(const float *actualBegin,
-                           const float *const actualEnd,
-                           const float *expectedBegin) const = 0;
+  virtual void Set(const Matrix &prediction, const Matrix &expected) {}
+
+  const double &GetError() const { return m_error; }
+
+  const Matrix &GetGradients() const { return m_gradients; }
+
+protected:
+  double m_error;
+  Matrix m_gradients;
 };

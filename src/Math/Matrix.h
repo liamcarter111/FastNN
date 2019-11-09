@@ -1,35 +1,65 @@
 #pragma once
-#include <functional>
+#include <vector>
 
 struct Matrix {
-  Matrix(const Matrix *other);
-
-  Matrix(const Matrix &other);
-
-  Matrix(Matrix &&other);
+  Matrix();
 
   Matrix(const int &iCols, const int &iRows);
 
-  ~Matrix();
+  Matrix operator-() const;
 
-  Matrix operator*(const float &rhs) const;
+  Matrix operator-(const double &rhs) const;
 
-  Matrix &operator*=(const float &rhs);
+  Matrix &operator-=(const double &rhs);
+
+  Matrix &operator-=(const Matrix &rhs);
+
+  Matrix operator-(const Matrix &rhs) const;
+
+  Matrix operator+(const double &rhs) const;
+
+  Matrix &operator+=(const double &rhs);
+
+  Matrix &operator+=(const Matrix &rhs);
+
+  Matrix operator+(const Matrix &rhs) const;
+
+  Matrix operator*(const double &rhs) const;
+
+  Matrix &operator*=(const double &rhs);
 
   Matrix operator*(const Matrix &rhs) const;
 
-  Matrix &operator=(const Matrix &rhs);
+  double &operator()(const int &row, const int &col);
 
-  float &operator()(const int &row, const int &col);
+  const double &operator()(const int &row, const int &col) const;
 
-  const float &operator()(const int &row, const int &col) const;
+  double Accumulate(const double init = 0.0f) const;
+
+  Matrix Pow(const int exponent) const;
+
+  Matrix Hadamard(const Matrix &rhs) const;
+
+  Matrix Transpose() const;
+
+  void Zero();
+
+  void Fill(const double &v);
+
+  void Randomize();
 
   void Resize(const int &rows, const int &cols);
 
-  template <class TReturn>
-  TReturn Map(const std::function<TReturn(const float * /* begin */,
-                                          const float * /* end */)> &fn) const {
-    return fn(Data(), Data() + Size());
+  void Print(const int precision = 3) const;
+
+  template <typename TFunction> Matrix Map(const TFunction &function) const {
+    Matrix result(RowSize(), ColSize());
+
+    for (unsigned i = 0; i < Size(); ++i) {
+      result.m_data.at(i) = function(m_data.at(i));
+    }
+
+    return result;
   }
 
   const int &RowSize() const { return m_iRows; }
@@ -38,30 +68,11 @@ struct Matrix {
 
   const int &Size() const { return m_iElements; }
 
-  const float *Data() const { return m_data; }
-  float *Data() { return m_data; }
-
-  static Matrix &ADD(Matrix &out, const Matrix &lhs, const Matrix &rhs);
-
-  static Matrix &SUB(Matrix &out, const Matrix &lhs, const Matrix &rhs);
-
-  static Matrix &HADAMARD(Matrix &out, const Matrix &lhs, const Matrix &rhs);
-
-  static Matrix &MUL(Matrix &out, const Matrix &lhs, const float &rhs);
-
-  static Matrix &MUL(Matrix &out, const Matrix &lhs, const Matrix &rhs);
-
-  static Matrix &ZERO(Matrix &out);
-
-  static Matrix &FILL(Matrix &out, const float &v);
-
-  static Matrix &RANDOM(Matrix &out);
-
-  static Matrix &TRANSPOSE(Matrix &out);
+  const std::vector<double> &Data() const { return m_data; }
 
 private:
   int m_iCols;
   int m_iRows;
   int m_iElements;
-  float *m_data;
+  std::vector<double> m_data;
 };

@@ -1,164 +1,183 @@
 #include "Matrix.h"
+#include <algorithm>
 #include <cassert>
+#include <cmath>
 #include <cstdlib>
 #include <cstring>
+#include <iomanip>
+#include <iostream>
+#include <numeric>
 
-Matrix::Matrix(const Matrix *other)
-    : m_iCols(other->ColSize()), m_iRows(other->RowSize()),
-      m_iElements(other->Size()), m_data(new float[Size()]) {
-
-  memcpy(m_data, other->m_data, sizeof(float) * Size());
-}
-
-Matrix::Matrix(const Matrix &other)
-    : m_iCols(other.ColSize()), m_iRows(other.RowSize()),
-      m_iElements(other.Size()), m_data(new float[Size()]) {
-
-  memcpy(m_data, other.m_data, sizeof(float) * Size());
-}
-
-Matrix::Matrix(Matrix &&other)
-    : m_iCols(other.ColSize()), m_iRows(other.RowSize()),
-      m_iElements(other.Size()), m_data(other.Data()) {
-  other.m_data = nullptr;
-}
+Matrix::Matrix() : m_iCols(0), m_iRows(0), m_iElements(0){};
 
 Matrix::Matrix(const int &iRows, const int &iCols)
     : m_iCols(iCols), m_iRows(iRows), m_iElements(RowSize() * ColSize()),
-      m_data(new float[Size()]) {}
+      m_data(m_iElements) {}
 
-Matrix::~Matrix() {
-  delete[] m_data;
-  m_data = nullptr;
+Matrix &Matrix::operator-=(const double &rhs) {
+  for (int i = 0; i < Size(); i++) {
+    m_data.at(i) -= rhs;
+  }
+  return *this;
 }
 
-Matrix Matrix::operator*(const float &rhs) const {
-  Matrix result(this);
-  return Matrix::MUL(result, *this, rhs);
+Matrix &Matrix::operator-=(const Matrix &rhs) {
+  assert(rhs.ColSize() == ColSize());
+  assert(rhs.RowSize() == RowSize());
+
+  for (int i = 0; i < Size(); i++) {
+    m_data.at(i) -= rhs.m_data.at(i);
+  }
+  return *this;
 }
 
-Matrix &Matrix::operator*=(const float &rhs) {
-  return Matrix::MUL(*this, *this, rhs);
+Matrix &Matrix::operator+=(const double &rhs) {
+  for (int i = 0; i < Size(); i++) {
+    m_data.at(i) += rhs;
+  }
+  return *this;
+}
+
+Matrix &Matrix::operator+=(const Matrix &rhs) {
+  assert(rhs.ColSize() == ColSize());
+  assert(rhs.RowSize() == RowSize());
+
+  for (int i = 0; i < Size(); i++) {
+    m_data.at(i) += rhs.m_data.at(i);
+  }
+  return *this;
+}
+
+Matrix &Matrix::operator*=(const double &rhs) {
+  for (int i = 0; i < Size(); i++) {
+    m_data.at(i) *= rhs;
+  }
+  return *this;
 }
 
 Matrix Matrix::operator*(const Matrix &rhs) const {
+  assert(ColSize() == rhs.RowSize());
+
   Matrix result(RowSize(), rhs.ColSize());
-  Matrix::MUL(result, *this, rhs);
+
+  for (int j = 0; j < result.ColSize(); ++j) {
+    for (int i = 0; i < result.RowSize(); ++i) {
+      result(i, j) = 0.0f;
+      for (int k = 0; k < ColSize(); ++k) {
+        result(i, j) += (*this)(i, k) * rhs(k, j);
+      };
+    }
+  }
   return result;
 }
 
-Matrix &Matrix::operator=(const Matrix &rhs) {
-  if (this != &rhs) {
-    Resize(rhs.RowSize(), rhs.ColSize());
-    memcpy(Data(), rhs.Data(), sizeof(float) * Size());
+Matrix Matrix::operator-() const {
+  Matrix result(*this);
+  for (int i = 0; i < Size(); i++) {
+    result.m_data.at(i) = -result.m_data.at(i);
   }
-  return (*this);
+  return result;
 }
 
-float &Matrix::operator()(const int &row, const int &col) {
-  return Data()[col + row * ColSize()];
+Matrix Matrix::operator-(const double &rhs) const {
+  return Matrix(*this) -= rhs;
 }
 
-const float &Matrix::operator()(const int &row, const int &col) const {
-  return Data()[col + row * ColSize()];
+Matrix Matrix::operator-(const Matrix &rhs) const {
+  return Matrix(*this) -= rhs;
+}
+
+Matrix Matrix::operator+(const double &rhs) const {
+  return Matrix(*this) += rhs;
+}
+
+Matrix Matrix::operator+(const Matrix &rhs) const {
+  return Matrix(*this) += rhs;
+}
+
+Matrix Matrix::operator*(const double &rhs) const {
+  return Matrix(*this) *= rhs;
+}
+
+double &Matrix::operator()(const int &row, const int &col) {
+  return m_data.at(col + row * ColSize());
+}
+
+const double &Matrix::operator()(const int &row, const int &col) const {
+  return m_data.at(col + row * ColSize());
+}
+
+double Matrix::Accumulate(const double init) const {
+  return std::accumulate(Data().begin(), Data().end(), init);
+}
+
+Matrix Matrix::Pow(const int exponent) const {
+  Matrix result(*this);
+
+  for (int i = 0; i < Size(); i++) {
+    result.m_data.at(i) = std::pow(result.m_data.at(i), exponent);
+  }
+
+  return result;
+}
+
+Matrix Matrix::Hadamard(const Matrix &rhs) const {
+  assert(ColSize() == rhs.ColSize());
+  assert(RowSize() == rhs.RowSize());
+
+  Matrix result(RowSize(), rhs.ColSize());
+
+  for (int i = 0; i < Size(); i++) {
+    result.m_data.at(i) = m_data.at(i) * rhs.m_data.at(i);
+  }
+
+  return result;
+}
+
+Matrix Matrix::Transpose() const {
+  Matrix result(ColSize(), RowSize());
+
+  for (int i = 0; i < ColSize(); i++) {
+    for (int j = 0; j < RowSize(); j++) {
+      result(i, j) = (*this)(j, i);
+    }
+  }
+  return result;
+}
+
+void Matrix::Zero() { Fill(0.0); }
+
+void Matrix::Fill(const double &v) {
+  for (int i = 0; i < Size(); i++) {
+    m_data.at(i) = v;
+  }
+}
+
+void Matrix::Randomize() {
+  for (int i = 0; i < ColSize(); i++) {
+    for (int j = 0; j < RowSize(); j++) {
+      (*this)(j, i) = (double)(rand() + 1) / (double)(RAND_MAX + 1) +
+                      1.0 / (double)RAND_MAX;
+    }
+  }
 }
 
 void Matrix::Resize(const int &rows, const int &cols) {
   m_iRows = rows;
   m_iCols = cols;
-  int iElements = rows * cols;
-
-  if (Size() != iElements) {
-    m_iElements = iElements;
-    delete[] m_data;
-    m_data = new float[Size()];
-  }
+  m_iElements = rows * cols;
+  m_data.resize(m_iElements);
 }
 
-Matrix &Matrix::ADD(Matrix &out, const Matrix &lhs, const Matrix &rhs) {
-  assert(rhs.ColSize() == out.ColSize());
-  assert(rhs.RowSize() == out.RowSize());
-  assert(lhs.ColSize() == out.ColSize());
-  assert(lhs.RowSize() == out.RowSize());
-
-  for (int i = 0; i < out.Size(); i++) {
-    out.Data()[i] = lhs.Data()[i] + rhs.Data()[i];
-  }
-  return out;
-}
-
-Matrix &Matrix::SUB(Matrix &out, const Matrix &lhs, const Matrix &rhs) {
-  assert(rhs.ColSize() == out.ColSize());
-  assert(rhs.RowSize() == out.RowSize());
-  assert(lhs.ColSize() == out.ColSize());
-  assert(lhs.RowSize() == out.RowSize());
-
-  for (int i = 0; i < out.Size(); i++) {
-    out.Data()[i] = lhs.Data()[i] - rhs.Data()[i];
-  }
-  return out;
-}
-
-Matrix &Matrix::HADAMARD(Matrix &out, const Matrix &lhs, const Matrix &rhs) {
-  assert(rhs.ColSize() == out.ColSize());
-  assert(rhs.RowSize() == out.RowSize());
-  assert(lhs.ColSize() == out.ColSize());
-  assert(lhs.RowSize() == out.RowSize());
-
-  for (int i = 0; i < out.Size(); i++) {
-    out.Data()[i] = lhs.Data()[i] * rhs.Data()[i];
-  }
-  return out;
-}
-
-Matrix &Matrix::MUL(Matrix &out, const Matrix &lhs, const float &rhs) {
-  for (int i = 0; i < out.Size(); i++) {
-    out.Data()[i] = lhs.Data()[i] * rhs;
-  }
-  return out;
-}
-
-Matrix &Matrix::MUL(Matrix &out, const Matrix &lhs, const Matrix &rhs) {
-  for (int j = 0; j < out.ColSize(); ++j) {
-    for (int i = 0; i < out.RowSize(); ++i) {
-      float dot = 0;
-      for (int k = 0; k < out.ColSize(); ++k) {
-        dot += lhs(i, k) * rhs(k, j);
-      };
-      out(i, j) = dot;
+void Matrix::Print(const int precision) const {
+  const int precisionScalingFactor = std::pow(10, precision);
+  for (unsigned i = 0; i < RowSize(); i++) {
+    for (unsigned j = 0; j < ColSize(); j++) {
+      std::cout << std::fixed << std::setprecision(precision) << "["
+                << std::ceil((*this)(i, j) * precisionScalingFactor) /
+                       precisionScalingFactor
+                << "] " << std::setprecision(-1) << std::defaultfloat;
     }
+    std::cout << std::endl;
   }
-  return out;
-}
-
-Matrix &Matrix::ZERO(Matrix &out) {
-  for (int i = 0; i < out.Size(); i++) {
-    out.Data()[i] = 0.0f;
-  }
-  return out;
-}
-
-Matrix &Matrix::FILL(Matrix &out, const float &v) {
-  for (int i = 0; i < out.Size(); i++) {
-    out.Data()[i] = v;
-  }
-  return out;
-}
-
-Matrix &Matrix::RANDOM(Matrix &out) {
-  for (int i = 0; i < out.Size(); i++) {
-    out.Data()[i] = (float)rand() / RAND_MAX;
-  }
-  return out;
-}
-
-Matrix &Matrix::TRANSPOSE(Matrix &out) {
-  for (int i = 0; i < out.RowSize(); i++) {
-    for (int j = i; j < out.ColSize(); j++) {
-      float temp = out(i, j);
-      out(i, j) = out(j, i);
-      out(j, i) = temp;
-    }
-  }
-  return out;
 }

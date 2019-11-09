@@ -1,14 +1,9 @@
 #include "Sigmoid.h"
-#include <algorithm>
 #include <cmath>
-#include <numeric>
 
-void Sigmoid::operator()(float *begin, float *const end) const {
-  std::fill(begin, end,
-            1.0f / (1.0f + std::exp(-std::accumulate(begin, end, 0.0f))));
-}
-
-void Sigmoid::Derivative(float *begin, float *const end) const {
-  const float sum = std::accumulate(begin, end, 0.0f);
-  std::fill(begin, end, std::exp(-sum) / std::pow(1.0f + std::exp(-sum), 2));
-}
+void Sigmoid::Set(const Matrix &weightedInputs) {
+  m_activations = weightedInputs.Map(
+      [](const double &val) { return 1.0 / (1.0 + std::exp(-val)); });
+  m_derivatives =
+      m_activations.Map([](const double &val) { return val * (1.0 - val); });
+};

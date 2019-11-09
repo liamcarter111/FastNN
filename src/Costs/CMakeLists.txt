@@ -1,19 +1,17 @@
 cmake_minimum_required(VERSION 3.0.0)
 
-SET(THIS Activations)
+SET(THIS Costs)
 
 SET(SRC_LIST 
-    ReLU.cpp
-    Sigmoid.cpp
-    Tanh.cpp
-    #Softmax.cpp
+    SquaredError.cpp
+    MeanSquaredError.cpp
+    RootSquaredError.cpp
 )
 
 SET(HEADER_FILES 
-    ReLU.h
-    Sigmoid.h
-    Tanh.h
-    #Softmax.h
+    SquaredError.h
+    MeanSquaredError.h
+    RootSquaredError.h
 )
 
 add_library(

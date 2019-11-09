@@ -1,8 +1,8 @@
 #pragma once
 
 #include <Activation.h>
+#include <Matrix.h>
 
 struct ReLU final : Activation {
-  void operator()(float *begin, float *const end) const;
-  void Derivative(float *begin, float *const end) const;
+  void Set(const Matrix &weightedInputs);
 };

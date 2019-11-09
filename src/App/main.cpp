@@ -1,96 +1,87 @@
 #include <Matrix.h>
-#include <chrono>
+#include <Network.h>
+#include <Sigmoid.h>
+#include <SquaredError.h>
+#include <cmath>
 #include <iomanip>
 #include <iostream>
-
-#define DIM_S 5
-#define DIM_M 25
-#define DIM_L 125
-#define DIM_XL 625
-
-#define ITERATIONS_S 10000000
-#define ITERATIONS_M 100000
-#define ITERATIONS_L 1000
-#define ITERATIONS_XL 10
-
-template <int DIM, int ITERATIONS> void Test() {
-  Matrix mat1(DIM, DIM);
-  Matrix mat2(DIM, DIM);
-  Matrix mat3(DIM, DIM);
-  Matrix::RANDOM(mat1);
-  Matrix::RANDOM(mat2);
-
-  auto t_start = std::chrono::high_resolution_clock::now();
-
-  for (size_t i = 0; i < ITERATIONS; i++) {
-    // mat3 = mat2 * mat1;
-    Matrix::MUL(mat3, mat1, mat2);
-  }
-
-  auto t_end = std::chrono::high_resolution_clock::now();
-  double total =
-      std::chrono::duration<double, std::milli>(t_end - t_start).count();
-  double opTime = total / ITERATIONS;
-  double opSec = 1000.0 / opTime;
-
-  std::cout << std::setprecision(2);
-  std::cout << std::setw(14);
-  std::cout << total << "|";
-  std::cout << std::setw(14);
-  std::cout << opTime * 1000000;
-  std::cout << "|";
-  std::cout << std::setw(14);
-  if (opSec > 1000) {
-    std::cout << std::setprecision(0);
-    std::cout << opSec / 1000 << "K";
-  } else {
-    std::cout << std::setprecision(3);
-    std::cout << opSec / 1000;
-  }
-  std::cout << "|";
-}
+#include <time.h>
+#include <vector>
 
 int main() {
   try {
+    srand(time(0));
 
-    std::cout << "-------------------------------------------------------------"
-                 "-------------------------------------------------------------"
-                 "-------------------------------------------------------------"
-                 "------\n"
-              << "|                       S                      "
-              << "|                       M                      "
-              << "|                       L                      "
-              << "|                       XL                     |\n"
-              << "|   Total ms   |"
-              << "    Op A/ns    |"
-              << "    Op K/Sec   |"
-              << "   Total ms   |"
-              << "    Op A/ns    |"
-              << "    Op P/Sec   |"
-              << "   Total ms   |"
-              << "    Op A/ns    |"
-              << "    Op P/Sec   |"
-              << "   Total ms   |"
-              << "    Op A/ns    |"
-              << "    Op P/Sec   |\n"
-              << "-------------------------------------------------------------"
-                 "-------------------------------------------------------------"
-                 "-------------------------------------------------------------"
-                 "------\n";
-    std::cout << std::fixed;
+    SquaredError cost;
+    Sigmoid hA1;
+    Sigmoid oA;
 
-    // while (1) {
-    std::cout << "|";
+    Layer hL1(4, &hA1);
+    Layer oL(1, &oA);
 
-    Test<DIM_S, ITERATIONS_S>();
-    Test<DIM_M, ITERATIONS_M>();
-    Test<DIM_L, ITERATIONS_L>();
-    Test<DIM_XL, ITERATIONS_XL>();
+    hL1.Init(2);
+    oL.Init(hL1.GetSize());
 
-    std::cout << "\n";
-    //  }
+    std::vector<Layer *> layers;
 
-    // std::cin.get();
+    layers.push_back(&hL1);
+    layers.push_back(&oL);
+
+    Network net(2, layers, &cost);
+
+    std::vector<Matrix> trainingInputs(4);
+    std::vector<Matrix> traningExpectations(4);
+
+    // 0 ^ 0 = 0
+    trainingInputs[0].Resize(2, 1);
+    traningExpectations[0].Resize(1, 1);
+    trainingInputs[0](0, 0) = 0;
+    trainingInputs[0](1, 0) = 0;
+    traningExpectations[0](0, 0) = 0;
+
+    // 0 ^ 1 = 1
+    trainingInputs[1].Resize(2, 1);
+    traningExpectations[1].Resize(1, 1);
+    trainingInputs[1](0, 0) = 0;
+    trainingInputs[1](1, 0) = 1;
+    traningExpectations[1](0, 0) = 1;
+
+    // 1 ^ 1 = 0
+    trainingInputs[2].Resize(2, 1);
+    traningExpectations[2].Resize(1, 1);
+    trainingInputs[2](0, 0) = 1;
+    trainingInputs[2](1, 0) = 1;
+    traningExpectations[2](0, 0) = 0;
+
+    // 1 ^ 0 = 1
+    trainingInputs[3].Resize(2, 1);
+    traningExpectations[3].Resize(1, 1);
+    trainingInputs[3](0, 0) = 1;
+    trainingInputs[3](1, 0) = 0;
+    traningExpectations[3](0, 0) = 1;
+
+    for (size_t i = 0; i < 30000; i++) {
+      int iTrainingSet = rand() % 4;
+      const Matrix &trainingInput = trainingInputs[iTrainingSet];
+      const Matrix &trainingExpected = traningExpectations[iTrainingSet];
+
+      double error = net.Optimize(trainingInput, trainingExpected, 0.1, 0.5);
+
+      if (i % 10000 == 0) {
+        std::cout << std::fixed << std::setw(8) << std::right << (i / 1)
+                  << std::setfill('0') << std::setprecision(3)
+                  << ": ERROR: " << std::ceil(error * 1000) / 1000 << std::endl
+                  << std::setprecision(-1) << std::defaultfloat;
+
+        std::cout << "INPUT:" << std::endl;
+        trainingInput.Print();
+        std::cout << "EXPECTED:" << std::endl;
+        trainingExpected.Print();
+        std::cout << "OUTPUT:" << std::endl;
+        oL.GetOutput().Print();
+        std::cout << std::endl << std::endl;
+      }
+    }
 
     return 0;
   } catch (const std::exception &e) {

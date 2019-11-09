@@ -1,11 +1,15 @@
 #pragma once
+#include <Matrix.h>
 
 struct Activation {
-  Activation() {}
-  /**
-   */
-  virtual void operator()(float *begin, float *const end) const = 0;
-  /**
-   */
-  virtual void Derivative(float *begin, float *const end) const = 0;
+
+  virtual void Set(const Matrix &weightedInputs) {}
+
+  const Matrix &GetActivations() const { return m_activations; }
+
+  const Matrix &GetDerivatives() const { return m_derivatives; }
+
+protected:
+  Matrix m_activations;
+  Matrix m_derivatives;
 };

@@ -5,6 +5,7 @@ SET(THIS FastNN)
 add_subdirectory(Core)
 add_subdirectory(Math)
 add_subdirectory(Activations)
+add_subdirectory(Costs)
 add_subdirectory(App)
 
 add_library(
@@ -12,6 +13,7 @@ add_library(
     Core
     Math
     Activations
+    Costs
 )
 set_target_properties(${THIS} PROPERTIES LINKER_LANGUAGE CXX)
 SET_TARGET_PROPERTIES(${THIS} PROPERTIES PREFIX "")
