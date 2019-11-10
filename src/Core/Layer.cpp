@@ -42,18 +42,27 @@ void Layer::BackwardProp(const Matrix &pLActivations, Matrix &error,
   assert(m_biases.RowSize() == m_sizeOfLayer);
   assert(m_biases.ColSize() == 1);
 
-  // Get the gradient
+  // Get the gradient, ie the dE/dW
   Matrix gradient = error.Hadamard(m_activation->GetDerivatives());
-
-  const Matrix deltaBiases = gradient;
-  const Matrix deltaWeights = gradient.TransposeRHSMultiply(pLActivations);
 
   // Calculate the gradient for the previous layer (remember the next layer is
   // the previous we are going backwards).
   error = m_weights.TransposeLHSMultiply(gradient);
 
-  m_biases -= deltaBiases * learningRate + m_biasesMomentum * momentumRate;
-  m_weights -= deltaWeights * learningRate + m_weightsMomentum * momentumRate;
+  Matrix &deltaBiases = gradient;
+  Matrix deltaWeights = gradient.TransposeRHSMultiply(pLActivations);
+
+  m_biasesMomentum *= momentumRate;
+  m_weightsMomentum *= momentumRate;
+
+  deltaBiases *= learningRate;
+  deltaWeights *= learningRate;
+
+  deltaBiases += m_biasesMomentum;
+  deltaWeights += m_weightsMomentum;
+
+  m_biases -= deltaBiases;
+  m_weights -= deltaWeights;
 
   m_weightsMomentum = deltaWeights;
   m_biasesMomentum = deltaBiases;
