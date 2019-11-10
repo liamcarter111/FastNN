@@ -46,44 +46,11 @@ void Layer::BackwardProp(const Matrix &pLActivations, Matrix &error,
   Matrix gradient = error.Hadamard(m_activation->GetDerivatives());
 
   const Matrix deltaBiases = gradient;
-  const Matrix deltaWeights = (gradient * (pLActivations.Transpose()));
-
-#if 0
-
-  std::cout << "##########Layer##########" << std::endl;
-
-  std::cout << "Error:" << std::endl;
-  error.Print();
-
-  std::cout << "Previous Out:" << std::endl;
-  pLActivations.Print();
-
-  std::cout << "Previous OutT:" << std::endl;
-  pLActivations.Transpose().Print();
-
-  std::cout << "Derivatives:" << std::endl;
-  m_activation->GetDerivatives().Print();
-
-  std::cout << "Gradient:" << std::endl;
-  gradient.Print();
-
-  std::cout << "Weights:" << std::endl;
-  m_weights.Print();
-
-  std::cout << "Bias:" << std::endl;
-  m_biases.Print();
-
-  std::cout << "Delta Weights:" << std::endl;
-  deltaWeights.Print();
-
-  std::cout << "Delta Bias:" << std::endl;
-  deltaBiases.Print();
-
-#endif
+  const Matrix deltaWeights = gradient.TransposeRHSMultiply(pLActivations);
 
   // Calculate the gradient for the previous layer (remember the next layer is
   // the previous we are going backwards).
-  error = m_weights.Transpose() * gradient;
+  error = m_weights.TransposeLHSMultiply(gradient);
 
   m_biases -= deltaBiases * learningRate + m_biasesMomentum * momentumRate;
   m_weights -= deltaWeights * learningRate + m_weightsMomentum * momentumRate;
