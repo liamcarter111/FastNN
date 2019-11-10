@@ -2,6 +2,7 @@
 #include <Network.h>
 #include <Sigmoid.h>
 #include <SquaredError.h>
+#include <chrono>
 #include <cmath>
 #include <iomanip>
 #include <iostream>
@@ -16,7 +17,7 @@ int main() {
     Sigmoid hA1;
     Sigmoid oA;
 
-    Layer hL1(4, &hA1);
+    Layer hL1(2, &hA1);
     Layer oL(1, &oA);
 
     hL1.Init(2);
@@ -60,28 +61,35 @@ int main() {
     trainingInputs[3](1, 0) = 0;
     traningExpectations[3](0, 0) = 1;
 
-    for (size_t i = 0; i < 30000; i++) {
+    double accumulated_error = 0.0;
+    double error_threshold = 1e-5;
+
+    size_t i;
+
+    auto start = std::chrono::system_clock::now();
+
+    for (i = 0; i < 100000; ++i) {
       int iTrainingSet = rand() % 4;
       const Matrix &trainingInput = trainingInputs[iTrainingSet];
       const Matrix &trainingExpected = traningExpectations[iTrainingSet];
 
-      double error = net.Optimize(trainingInput, trainingExpected, 0.1, 0.5);
-
-      if (i % 10000 == 0) {
-        std::cout << std::fixed << std::setw(8) << std::right << (i / 1)
-                  << std::setfill('0') << std::setprecision(3)
-                  << ": ERROR: " << std::ceil(error * 1000) / 1000 << std::endl
-                  << std::setprecision(-1) << std::defaultfloat;
-
-        std::cout << "INPUT:" << std::endl;
-        trainingInput.Print();
-        std::cout << "EXPECTED:" << std::endl;
-        trainingExpected.Print();
-        std::cout << "OUTPUT:" << std::endl;
-        oL.GetOutput().Print();
-        std::cout << std::endl << std::endl;
-      }
+      const float error =
+          net.Optimize(trainingInput, trainingExpected, 0.1, 0.5);
+      accumulated_error += error;
     }
+
+    auto now = std::chrono::system_clock::now();
+
+    auto duration =
+        std::chrono::duration_cast<std::chrono::milliseconds>(now - start)
+            .count();
+
+    std::cout << std::endl
+              << std::endl
+              << std::endl
+              << "Iterations:" << i << std::endl
+              << "FINAL MODDEL ERROR: " << accumulated_error / i << std::endl
+              << " Took: " << duration << "ms";
 
     return 0;
   } catch (const std::exception &e) {

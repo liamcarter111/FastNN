@@ -134,6 +134,38 @@ Matrix Matrix::Hadamard(const Matrix &rhs) const {
   return result;
 }
 
+Matrix Matrix::TransposeLHSMultiply(const Matrix &rhs) const {
+  assert(RowSize() == rhs.RowSize());
+
+  Matrix result(ColSize(), rhs.ColSize());
+
+  for (int j = 0; j < result.ColSize(); ++j) {
+    for (int i = 0; i < result.RowSize(); ++i) {
+      result(i, j) = 0.0f;
+      for (int k = 0; k < RowSize(); ++k) {
+        result(i, j) += (*this)(k, i) * rhs(k, j);
+      };
+    }
+  }
+  return result;
+}
+
+Matrix Matrix::TransposeRHSMultiply(const Matrix &rhs) const {
+  assert(ColSize() == rhs.ColSize());
+
+  Matrix result(RowSize(), rhs.RowSize());
+
+  for (int j = 0; j < result.ColSize(); ++j) {
+    for (int i = 0; i < result.RowSize(); ++i) {
+      result(i, j) = 0.0f;
+      for (int k = 0; k < ColSize(); ++k) {
+        result(i, j) += (*this)(i, k) * rhs(j, k);
+      };
+    }
+  }
+  return result;
+}
+
 Matrix Matrix::Transpose() const {
   if (ColSize() == 1 || RowSize() == 1) {
     Matrix result(*this);

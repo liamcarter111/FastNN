@@ -40,6 +40,10 @@ struct Matrix {
 
   Matrix Hadamard(const Matrix &rhs) const;
 
+  Matrix TransposeLHSMultiply(const Matrix &rhs) const;
+
+  Matrix TransposeRHSMultiply(const Matrix &rhs) const;
+
   Matrix Transpose() const;
 
   void Zero();
@@ -63,12 +67,6 @@ struct Matrix {
   }
 
   const int &RowSize() const { return m_iRows; }
-
-  static Matrix &FILL(Matrix &out, const float &v);
-
-  static Matrix &RANDOM(Matrix &out);
-
-  static Matrix &TRANSPOSE(Matrix &out);
 
   const int &ColSize() const { return m_iCols; }
 
