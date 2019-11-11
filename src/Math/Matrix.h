@@ -1,4 +1,5 @@
 #pragma once
+#include <cassert>
 #include <vector>
 
 struct Matrix {
@@ -58,12 +59,7 @@ struct Matrix {
 
   template <typename TFunction> Matrix Map(const TFunction &function) const {
     Matrix result(RowSize(), ColSize());
-
-    for (unsigned i = 0; i < Size(); ++i) {
-      result.m_data.at(i) = function(m_data.at(i));
-    }
-
-    return result;
+    return MAP(*this, function, result);
   }
 
   const int &RowSize() const { return m_iRows; }
@@ -73,6 +69,38 @@ struct Matrix {
   const int &Size() const { return m_iElements; }
 
   const std::vector<double> &Data() const { return m_data; }
+
+  static Matrix &HAD(const Matrix &lhs, const Matrix &rhs, Matrix &out);
+
+  static Matrix &SUB(const Matrix &lhs, const Matrix &rhs, Matrix &out);
+
+  static Matrix &SUB(const Matrix &lhs, const float rhs, Matrix &out);
+
+  static Matrix &ADD(const Matrix &lhs, const Matrix &rhs, Matrix &out);
+
+  static Matrix &ADD(const Matrix &lhs, const float rhs, Matrix &out);
+
+  static Matrix &MUL(const Matrix &lhs, const Matrix &rhs, Matrix &out);
+
+  static Matrix &MUL_LHS_T(const Matrix &lhs, const Matrix &rhs, Matrix &out);
+
+  static Matrix &MUL_RHS_T(const Matrix &lhs, const Matrix &rhs, Matrix &out);
+
+  static Matrix &MUL(const Matrix &lhs, const float rhs, Matrix &out);
+
+  static Matrix &POW(const Matrix &lhs, const int exponent, Matrix &out);
+
+  template <typename TFunction>
+  static Matrix &MAP(const Matrix &lhs, const TFunction &function,
+                     Matrix &out) {
+    assert(rhs.RowSize() == out.ColSize());
+    assert(lhs.RowSize() == out.RowSize());
+
+    for (int i = 0; i < lhs.Size(); ++i) {
+      out.m_data.at(i) = function(lhs.m_data.at(i));
+    }
+    return out;
+  }
 
 private:
   int m_iCols;
