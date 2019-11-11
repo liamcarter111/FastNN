@@ -224,3 +224,138 @@ void Matrix::Print(const int precision) const {
     std::cout << std::endl;
   }
 }
+
+Matrix &Matrix::HAD(const Matrix &lhs, const Matrix &rhs, Matrix &out) {
+  assert(lhs.ColSize() == out.ColSize());
+  assert(lhs.RowSize() == out.RowSize());
+  assert(rhs.ColSize() == out.ColSize());
+  assert(rhs.RowSize() == out.RowSize());
+
+  for (int i = 0; i < out.Size(); i++) {
+    out.m_data.at(i) = lhs.m_data.at(i) * rhs.m_data.at(i);
+  }
+
+  return out;
+}
+
+Matrix &Matrix::SUB(const Matrix &lhs, const Matrix &rhs, Matrix &out) {
+  assert(lhs.ColSize() == out.ColSize());
+  assert(lhs.RowSize() == out.RowSize());
+  assert(rhs.ColSize() == out.ColSize());
+  assert(rhs.RowSize() == out.RowSize());
+
+  for (int i = 0; i < out.Size(); i++) {
+    out.m_data.at(i) = lhs.m_data.at(i) - rhs.m_data.at(i);
+  }
+
+  return out;
+}
+
+Matrix &Matrix::SUB(const Matrix &lhs, const float rhs, Matrix &out) {
+  assert(lhs.ColSize() == out.ColSize());
+  assert(lhs.RowSize() == out.RowSize());
+
+  for (int i = 0; i < out.Size(); i++) {
+    out.m_data.at(i) = lhs.m_data.at(i) - rhs;
+  }
+
+  return out;
+}
+
+Matrix &Matrix::ADD(const Matrix &lhs, const Matrix &rhs, Matrix &out) {
+  assert(lhs.ColSize() == out.ColSize());
+  assert(lhs.RowSize() == out.RowSize());
+  assert(rhs.ColSize() == out.ColSize());
+  assert(rhs.RowSize() == out.RowSize());
+
+  for (int i = 0; i < out.Size(); i++) {
+    out.m_data.at(i) = lhs.m_data.at(i) + rhs.m_data.at(i);
+  }
+
+  return out;
+}
+
+Matrix &Matrix::ADD(const Matrix &lhs, const float rhs, Matrix &out) {
+  assert(lhs.ColSize() == out.ColSize());
+  assert(lhs.RowSize() == out.RowSize());
+
+  for (int i = 0; i < out.Size(); i++) {
+    out.m_data.at(i) = lhs.m_data.at(i) + rhs;
+  }
+
+  return out;
+}
+
+Matrix &Matrix::MUL(const Matrix &lhs, const Matrix &rhs, Matrix &out) {
+  assert(&lhs != &out);
+  assert(&rhs != &out);
+
+  assert(ColSize() == rhs.RowSize());
+  assert(rhs.ColSize() == out.ColSize());
+  assert(lhs.RowSize() == out.RowSize());
+
+  for (int j = 0; j < out.ColSize(); ++j) {
+    for (int i = 0; i < out.RowSize(); ++i) {
+      out(i, j) = 0.0f;
+      for (int k = 0; k < lhs.ColSize(); ++k) {
+        out(i, j) += lhs(i, k) * rhs(k, j);
+      };
+    }
+  }
+  return out;
+}
+
+Matrix &Matrix::MUL_LHS_T(const Matrix &lhs, const Matrix &rhs, Matrix &out) {
+  assert(&lhs != &out);
+  assert(&rhs != &out);
+
+  assert(ColSize() == rhs.RowSize());
+  assert(rhs.ColSize() == out.ColSize());
+  assert(lhs.ColSize() == out.RowSize());
+
+  for (int j = 0; j < out.ColSize(); ++j) {
+    for (int i = 0; i < out.RowSize(); ++i) {
+      out(i, j) = 0.0f;
+      for (int k = 0; k < lhs.RowSize(); ++k) {
+        out(i, j) += lhs(k, i) * rhs(k, j);
+      };
+    }
+  }
+  return out;
+}
+
+Matrix &Matrix::MUL_RHS_T(const Matrix &lhs, const Matrix &rhs, Matrix &out) {
+  assert(&lhs != &out);
+  assert(&rhs != &out);
+
+  assert(ColSize() == rhs.ColSize());
+  assert(rhs.RowSize() == out.ColSize());
+  assert(lhs.RowSize() == out.RowSize());
+
+  for (int j = 0; j < out.ColSize(); ++j) {
+    for (int i = 0; i < out.RowSize(); ++i) {
+      out(i, j) = 0.0f;
+      for (int k = 0; k < lhs.ColSize(); ++k) {
+        out(i, j) += lhs(i, k) * rhs(j, k);
+      };
+    }
+  }
+  return out;
+}
+
+Matrix &Matrix::MUL(const Matrix &lhs, const float rhs, Matrix &out) {
+  assert(lhs.ColSize() == out.ColSize());
+  assert(lhs.RowSize() == out.RowSize());
+
+  for (int i = 0; i < out.Size(); i++) {
+    out.m_data.at(i) = lhs.m_data.at(i) * rhs;
+  }
+
+  return out;
+}
+
+Matrix &Matrix::POW(const Matrix &lhs, const int exponent, Matrix &out) {
+  return MAP(
+      lhs, [&exponent](const double &val) { return std::pow(val, exponent); },
+      out);
+}
