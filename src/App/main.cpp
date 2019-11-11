@@ -63,7 +63,7 @@ int main() {
 
     auto start = std::chrono::system_clock::now();
 
-    for (int i = 0; i < 10000; ++i) {
+    for (int i = 0; i < 1000000; ++i) {
       int iTrainingSet = rand() % 4;
       const Matrix &trainingInput = trainingInputs[iTrainingSet];
       const Matrix &trainingExpected = traningExpectations[iTrainingSet];
@@ -87,11 +87,8 @@ int main() {
         std::chrono::duration_cast<std::chrono::milliseconds>(now - start)
             .count();
 
-    std::cout << std::endl
-              << std::endl
-              << std::endl
-              << "FINAL MODDEL ERROR: " << accumulated_error / 500 << std::endl
-              << " Took: " << duration << "ms";
+    std::cout << "FINAL MODDEL ERROR: " << accumulated_error / 500 << std::endl
+              << "Took: " << duration << "ms";
 
     return 0;
   } catch (const std::exception &e) {
