@@ -61,24 +61,27 @@ int main() {
     trainingInputs[3](1, 0) = 0;
     traningExpectations[3](0, 0) = 1;
 
-    double accumulated_error = 0.0;
-    double error_threshold = 1e-5;
-
-    size_t i;
-
     auto start = std::chrono::system_clock::now();
 
-    for (i = 0; i < 100000; ++i) {
+    for (int i = 0; i < 10000; ++i) {
+      int iTrainingSet = rand() % 4;
+      const Matrix &trainingInput = trainingInputs[iTrainingSet];
+      const Matrix &trainingExpected = traningExpectations[iTrainingSet];
+      net.Optimize(trainingInput, trainingExpected, 0.25, 0.77);
+    }
+
+    auto now = std::chrono::system_clock::now();
+    double accumulated_error = 0.0;
+
+    for (int i = 0; i < 500; ++i) {
       int iTrainingSet = rand() % 4;
       const Matrix &trainingInput = trainingInputs[iTrainingSet];
       const Matrix &trainingExpected = traningExpectations[iTrainingSet];
 
-      const float error =
-          net.Optimize(trainingInput, trainingExpected, 0.1, 0.5);
-      accumulated_error += error;
+      accumulated_error +=
+          net.Optimize(trainingInput, trainingExpected, 0.0, 0.0);
+      ;
     }
-
-    auto now = std::chrono::system_clock::now();
 
     auto duration =
         std::chrono::duration_cast<std::chrono::milliseconds>(now - start)
@@ -87,8 +90,7 @@ int main() {
     std::cout << std::endl
               << std::endl
               << std::endl
-              << "Iterations:" << i << std::endl
-              << "FINAL MODDEL ERROR: " << accumulated_error / i << std::endl
+              << "FINAL MODDEL ERROR: " << accumulated_error / 500 << std::endl
               << " Took: " << duration << "ms";
 
     return 0;

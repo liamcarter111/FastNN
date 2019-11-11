@@ -29,20 +29,22 @@ double Network::Optimize(const Matrix &input, const Matrix &expected,
 
   const double globalError = m_cost->GetError();
 
-  Matrix error = m_cost->GetGradients();
+  if (learningRate != 0.0) {
+    Matrix error = m_cost->GetGradients();
 
-  // Run through all the layers except the last (backwards).
-  for (int i = m_layers.size() - 1; i > 0; --i) {
-    Layer &currentLayer = *m_layers[i];
-    Layer &previousLayer = *m_layers[i - 1];
+    // Run through all the layers except the last (backwards).
+    for (int i = m_layers.size() - 1; i > 0; --i) {
+      Layer &currentLayer = *m_layers[i];
+      Layer &previousLayer = *m_layers[i - 1];
 
-    currentLayer.BackwardProp(previousLayer.GetOutput(), error, learningRate,
-                              momentumRate);
+      currentLayer.BackwardProp(previousLayer.GetOutput(), error, learningRate,
+                                momentumRate);
+    }
+
+    // Call the first layer with the network input.
+    Layer &lastLayer = *m_layers.front();
+    lastLayer.BackwardProp(input, error, learningRate, momentumRate);
   }
-
-  // Call the first layer with the network input.
-  Layer &lastLayer = *m_layers.front();
-  lastLayer.BackwardProp(input, error, learningRate, momentumRate);
 
   return globalError;
 };

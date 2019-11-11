@@ -213,9 +213,9 @@ void Matrix::Resize(const int &rows, const int &cols) {
 }
 
 void Matrix::Print(const int precision) const {
-  const int precisionScalingFactor = std::pow(10, precision);
-  for (unsigned i = 0; i < RowSize(); i++) {
-    for (unsigned j = 0; j < ColSize(); j++) {
+  const int precisionScalingFactor = (int)std::pow(10, precision);
+  for (int i = 0; i < RowSize(); i++) {
+    for (int j = 0; j < ColSize(); j++) {
       std::cout << std::fixed << std::setprecision(precision) << "["
                 << std::ceil((*this)(i, j) * precisionScalingFactor) /
                        precisionScalingFactor
