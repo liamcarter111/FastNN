@@ -3,7 +3,7 @@
 #include <cstring>
 
 Network::Network(const int inputSize, std::vector<Layer *> &layers, Cost *cost)
-    : m_layers(layers), m_cost(cost) {
+    : m_cost(cost), m_layers(layers) {
   assert(layers.size() > 0);
 }
 
