@@ -33,7 +33,7 @@ double Network::Optimize(const Matrix &input, const Matrix &expected,
     Matrix error = m_cost->GetGradients();
 
     // Run through all the layers except the last (backwards).
-    for (int i = m_layers.size() - 1; i > 0; --i) {
+    for (size_t i = m_layers.size() - 1; i > 0; --i) {
       Layer &currentLayer = *m_layers[i];
       Layer &previousLayer = *m_layers[i - 1];
 
