@@ -9,7 +9,7 @@ add_subdirectory(Costs)
 add_subdirectory(App)
 
 add_library(
-    ${THIS} SHARED
+    ${THIS} STATIC 
     Core
     Math
     Activations
