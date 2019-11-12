@@ -7,6 +7,8 @@ Layer::Layer(const int sizeOfLayer, Activation *const activation)
     : m_sizeOfLayer(sizeOfLayer), m_activation(activation) {
   assert(sizeOfLayer > 0);
   assert(activation != nullptr);
+
+  m_activation->Init(m_sizeOfLayer);
 }
 
 const Matrix &Layer::GetOutput() const {
@@ -80,8 +82,6 @@ void Layer::Init(const int previousLayerSize) {
 
   weights.Randomize();
   biases.Randomize();
-
-  // weights *= std::sqrt(2.0 / previousLayerSize);
 
   Init(previousLayerSize, weights, biases);
 }

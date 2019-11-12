@@ -266,7 +266,7 @@ Matrix &Matrix::MUL_LHS_T(const Matrix &lhs, const Matrix &rhs, Matrix &out) {
   assert(&lhs != &out);
   assert(&rhs != &out);
 
-  assert(lhs.ColSize() == rhs.RowSize());
+  assert(lhs.RowSize() == rhs.RowSize());
   assert(rhs.ColSize() == out.ColSize());
   assert(lhs.ColSize() == out.RowSize());
 
@@ -293,8 +293,8 @@ Matrix &Matrix::MUL_RHS_T(const Matrix &lhs, const Matrix &rhs, Matrix &out) {
   assert(rhs.RowSize() == out.ColSize());
   assert(lhs.RowSize() == out.RowSize());
 
-  for (int i = 0; i < out.RowSize(); ++i) {
-    for (int j = 0; j < out.ColSize(); ++j) {
+  for (int j = 0; j < out.ColSize(); ++j) {
+    for (int i = 0; i < out.RowSize(); ++i) {
       out(i, j) = 0.0f;
       for (int k = 0; k < lhs.ColSize(); ++k) {
         out(i, j) += lhs(i, k) * rhs(j, k);
