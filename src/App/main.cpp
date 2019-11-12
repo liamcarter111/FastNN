@@ -11,7 +11,7 @@
 
 int main() {
   try {
-    srand(time(0));
+    // srand(time(0));
 
     SquaredError cost;
     Sigmoid hA1;
