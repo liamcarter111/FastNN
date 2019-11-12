@@ -118,7 +118,7 @@ struct Matrix {
   template <typename TFunction>
   static Matrix &MAP(const Matrix &lhs, const TFunction &function,
                      Matrix &out) {
-    assert(rhs.RowSize() == out.ColSize());
+    assert(lhs.ColSize() == out.ColSize());
     assert(lhs.RowSize() == out.RowSize());
 
     for (int i = 0; i < lhs.Size(); ++i) {
