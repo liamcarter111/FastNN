@@ -58,8 +58,7 @@ struct Matrix {
   void Print(const int precision = 3) const;
 
   template <typename TFunction> Matrix Map(const TFunction &function) const {
-    Matrix result(RowSize(), ColSize());
-    return MAP(*this, function, result);
+    return MAP(*this, function, Matrix(RowSize(), ColSize()));
   }
 
   const int &RowSize() const { return m_iRows; }
@@ -70,25 +69,51 @@ struct Matrix {
 
   const std::vector<double> &Data() const { return m_data; }
 
+  static Matrix &&HAD(const Matrix &lhs, const Matrix &rhs, Matrix &&out);
+
   static Matrix &HAD(const Matrix &lhs, const Matrix &rhs, Matrix &out);
+
+  static Matrix &&SUB(const Matrix &lhs, const Matrix &rhs, Matrix &&out);
 
   static Matrix &SUB(const Matrix &lhs, const Matrix &rhs, Matrix &out);
 
+  static Matrix &&SUB(const Matrix &lhs, const float rhs, Matrix &&out);
+
   static Matrix &SUB(const Matrix &lhs, const float rhs, Matrix &out);
+
+  static Matrix &&ADD(const Matrix &lhs, const Matrix &rhs, Matrix &&out);
 
   static Matrix &ADD(const Matrix &lhs, const Matrix &rhs, Matrix &out);
 
+  static Matrix &&ADD(const Matrix &lhs, const float rhs, Matrix &&out);
+
   static Matrix &ADD(const Matrix &lhs, const float rhs, Matrix &out);
+
+  static Matrix &&MUL(const Matrix &lhs, const Matrix &rhs, Matrix &&out);
 
   static Matrix &MUL(const Matrix &lhs, const Matrix &rhs, Matrix &out);
 
-  static Matrix &MUL_LHS_T(const Matrix &lhs, const Matrix &rhs, Matrix &out);
+  static Matrix &&MUL_RHS_T(const Matrix &lhs, const Matrix &rhs, Matrix &&out);
 
   static Matrix &MUL_RHS_T(const Matrix &lhs, const Matrix &rhs, Matrix &out);
 
+  static Matrix &&MUL_LHS_T(const Matrix &lhs, const Matrix &rhs, Matrix &&out);
+
+  static Matrix &MUL_LHS_T(const Matrix &lhs, const Matrix &rhs, Matrix &out);
+
+  static Matrix &&MUL(const Matrix &lhs, const float rhs, Matrix &&out);
+
   static Matrix &MUL(const Matrix &lhs, const float rhs, Matrix &out);
 
+  static Matrix &&POW(const Matrix &lhs, const int exponent, Matrix &&out);
+
   static Matrix &POW(const Matrix &lhs, const int exponent, Matrix &out);
+
+  template <typename TFunction>
+  static Matrix &&MAP(const Matrix &lhs, const TFunction &function,
+                      Matrix &&out) {
+    return std::move(MAP(lhs, function, out));
+  }
 
   template <typename TFunction>
   static Matrix &MAP(const Matrix &lhs, const TFunction &function,
