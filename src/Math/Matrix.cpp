@@ -243,7 +243,7 @@ Matrix &Matrix::MUL(const Matrix &lhs, const Matrix &rhs, Matrix &out) {
   assert(&lhs != &out);
   assert(&rhs != &out);
 
-  assert(ColSize() == rhs.RowSize());
+  assert(lhs.ColSize() == rhs.RowSize());
   assert(rhs.ColSize() == out.ColSize());
   assert(lhs.RowSize() == out.RowSize());
 
@@ -266,7 +266,7 @@ Matrix &Matrix::MUL_LHS_T(const Matrix &lhs, const Matrix &rhs, Matrix &out) {
   assert(&lhs != &out);
   assert(&rhs != &out);
 
-  assert(ColSize() == rhs.RowSize());
+  assert(lhs.ColSize() == rhs.RowSize());
   assert(rhs.ColSize() == out.ColSize());
   assert(lhs.ColSize() == out.RowSize());
 
@@ -289,7 +289,7 @@ Matrix &Matrix::MUL_RHS_T(const Matrix &lhs, const Matrix &rhs, Matrix &out) {
   assert(&lhs != &out);
   assert(&rhs != &out);
 
-  assert(ColSize() == rhs.ColSize());
+  assert(lhs.ColSize() == rhs.ColSize());
   assert(rhs.RowSize() == out.ColSize());
   assert(lhs.RowSize() == out.RowSize());
 
